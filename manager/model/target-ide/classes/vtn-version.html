@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-version</title>
+  </head>
+  <body>
+    <h1>vtn-version</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vver</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:version</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-09-01</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the version information of the VTN Manager.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+    
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#get-manager-version"><strong>get-manager-version</strong></a>
+            </td>
+            <td>
+            Return the version information of the VTN Manager.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    
+    
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="get-manager-version">get-manager-version
+    </h3>
+        <ul>
+            <li>
+                Description: Return the version information of the VTN Manager.
+            </li>
+            <ul>
+            <strong>
+            <li id="get-manager-version/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="get-manager-version/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: api-version
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A numerical value which represents API version of the
+                                   VTN Manager.
+                
+                                   API version is a numerical value equal to or greater
+                                   than 1, and it is incremented if API of the VTN manager
+                                   is changed.
+                
+                                   Current VTN Manager returns 2 as API version.
+            </li>
+            <li>
+                type: <a href="#get-manager-version/output/api-version/uint32">uint32</a>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="get-manager-version/output/bundle-version">
+                container: bundle-version
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes OSGi bundle version of the VTN Manager.
+                
+                                   Note that this container will be omitted if OSGi bundle
+                                   version is not available.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: major
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The major component of the OSGi bundle version
+                                       identifier.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: minor
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minor component of the OSGi bundle version
+                                       identifier.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: micro
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The micro component of the OSGi bundle version
+                                       identifier.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: qualifier
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The qualifier component of the OSGi bundle version
+                                       identifier.
+                
+                                       This field is omitted if the qualifier component is
+                                       not set in the OSGi bundle version identifier.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

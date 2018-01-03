@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+#
+# Copyright (c) 2015 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <scm>
+    <connection>scm:git:https://git.opendaylight.org/gerrit/p/vtn.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/vtn.git</developerConnection>
+    <url>https://wiki.opendaylight.org/view/OpenDaylight_Virtual_Tenant_Network_%28VTN%29:Main</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <parent>
+    <groupId>org.opendaylight.vtn.application</groupId>
+    <artifactId>dist</artifactId>
+    <version>1.3.0-Carbon</version>
+    <relativePath>..</relativePath>
+  </parent>
+
+  <artifactId>vtnmanager-vsemprovider</artifactId>
+  <packaging>pom</packaging>
+  <!-- <name> formatting is used by autorelease to parse and notify projects on
+       build failure. Please do not modify this unless you have a good reason. -->
+  <name>ODL :: vtn :: ${project.artifactId}</name>
+
+  <properties>
+    <vtn.vsem.pkg.classifier>bin</vtn.vsem.pkg.classifier>
+    <vtn.vsem.pkg.type>zip</vtn.vsem.pkg.type>
+    <vtn.vsem.pkg.path>
+      ${project.build.directory}/ODL_SCVMM_PROVIDER.zip
+    </vtn.vsem.pkg.path>
+  </properties>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${execplugin.version}</version>
+        <executions>
+          <!-- Run configure script. -->
+          <execution>
+            <id>vsem-configure</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>run_configure</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>vsem-exe</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>install</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+          Add binary distribution package to artifacts.
+          This must be defined after exec-maven-plugin to force execution
+          order.
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>vsem-attach-artifacts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${vtn.vsem.pkg.path}</file>
+                  <type>${vtn.vsem.pkg.type}</type>
+                  <classifier>${vtn.vsem.pkg.classifier}</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,5 @@
+org.opendaylight.yang.gen.v1.urn.opendaylight.vtn.impl.provider.rev150209.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.urn.opendaylight.vtn.impl.mapping.rev151001.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.urn.opendaylight.vtn.impl.topology.rev150209.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.urn.opendaylight.vtn.impl.inventory.rev150209.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.urn.opendaylight.vtn.impl.flow.rev150313.$YangModelBindingProvider

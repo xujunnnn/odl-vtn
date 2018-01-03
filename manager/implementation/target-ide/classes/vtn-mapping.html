@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-mapping</title>
+  </head>
+  <body>
+    <h1>vtn-mapping</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vmapping</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:impl:mapping</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-10-01</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The internal module to maintain mappings between virtual nodes and
+                   physical network elements.
+                   Application other than VTN Manager must not use models defined in
+                   this module.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        l2:opendaylight-l2-types 2013-08-27;
+            yang:ietf-yang-types 2013-07-15;
+            vtype:vtn-types 2015-02-09;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-map-reference"><strong>vtn-map-reference</strong></a>
+            </td>
+            <td>
+            Describes a virtual network mapping associated with physical
+                       network element.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-map-reference-set"><strong>vtn-map-reference-set</strong></a>
+            </td>
+            <td>
+            Describes a set of virtual network mappings associated with
+                       physical network element.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-map-reference-field"><strong>vtn-map-reference-field</strong></a>
+            </td>
+            <td>
+            Describes a field that keeps a virtual network mapping.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-map-reference-list"><strong>vtn-map-reference-list</strong></a>
+            </td>
+            <td>
+            Describes a set of virtual network mappings.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mappings"><strong>vtn-mappings</strong></a>
+            </td>
+            <td>
+            The root container of mappings between virtual nodes and
+                       physical network elements.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-map-reference">vtn-map-reference</h3>
+        <ul>
+            <li>
+                Description: Describes a virtual network mapping associated with physical
+                           network element.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: identifier
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes an identifier for a physical network element.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: mapping
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a virtual network mapping.
+                               The value of this field contains the type of mapping and
+                               the location of the virtual node.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-map-reference-set">vtn-map-reference-set</h3>
+        <ul>
+            <li>
+                Description: Describes a set of virtual network mappings associated with
+                           physical network element.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: identifier
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes an identifier for a physical network element.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-map-reference-set/map-reference-list">
+                list: map-reference-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a virtual network mapping.
+            </li>
+            <li>
+                key definition: mapping
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-map-reference-field">vtn-map-reference-field</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mapping
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a virtual network mapping.
+                               The value of this field contains the type of mapping and
+                               the location of the virtual node.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-map-reference-field">vtn-map-reference-field</h3>
+        <ul>
+            <li>
+                Description: Describes a field that keeps a virtual network mapping.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: mapping
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a virtual network mapping.
+                               The value of this field contains the type of mapping and
+                               the location of the virtual node.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-map-reference-list">vtn-map-reference-list</h3>
+        <ul>
+            <li>
+                Description: Describes a set of virtual network mappings.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-map-reference-list/map-reference-list">
+                list: map-reference-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a virtual network mapping.
+            </li>
+            <li>
+                key definition: mapping
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-map-reference-field">vtn-map-reference-field</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mapping
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a virtual network mapping.
+                               The value of this field contains the type of mapping and
+                               the location of the virtual node.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-mapping</strong>
+    <ul>
+    <li>
+        <a href="#vtn-mappings"><strong>vtn-mappings</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#vtn-mappings/vlan-mapping"><strong>vlan-mapping</strong> [identifier]
+            </a>
+            <ul>
+            <li>
+                <i>identifier</i>(U)
+            </li>
+            <li>
+                <i>mapping</i>(U)
+            </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#vtn-mappings/port-mapping"><strong>port-mapping</strong> [identifier]
+            </a>
+            <ul>
+            <li>
+                <i>identifier</i>(U)
+            </li>
+            <li>
+                <i>mapping</i>(U)
+            </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#vtn-mappings/mac-map-allowed"><strong>mac-map-allowed</strong> [identifier]
+            </a>
+            <ul>
+            <li>
+                <i>identifier</i>(U)
+            </li>
+            <li>
+                <i>mapping</i>(U)
+            </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#vtn-mappings/mac-map-denied"><strong>mac-map-denied</strong> [identifier]
+            </a>
+            <ul>
+            <li>
+                <i>identifier</i>(U)
+            </li>
+            <li>
+                <a href="#vtn-mappings/mac-map-denied/map-reference-list"><strong><i>map-reference-list</i></strong> [mapping]
+                (U)
+                </a>
+                <ul>
+                <li>
+                    <i>mapping</i>(U)
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-mappings">vtn-mappings</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-mappings">
+        vtn-mappings
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mapping:vtn-mappings</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-mappings/vlan-mapping">vlan-mapping</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-mappings/port-mapping">port-mapping</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-mappings/mac-map-allowed">mac-map-allowed</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-mappings/mac-map-denied">mac-map-denied</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-mappings xmlns="urn:opendaylight:vtn:impl:mapping"&gt;<!-- Child nodes -->
+        <!-- vlan-mapping -->
+            &lt!-- See <a href="#vtn-mappings/vlan-mapping">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vlan-mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/vlan-mapping&gt;
+        <!-- port-mapping -->
+            &lt!-- See <a href="#vtn-mappings/port-mapping">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;port-mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/port-mapping&gt;
+        <!-- mac-map-allowed -->
+            &lt!-- See <a href="#vtn-mappings/mac-map-allowed">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;mac-map-allowed xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/mac-map-allowed&gt;
+        <!-- mac-map-denied -->
+            &lt!-- See <a href="#vtn-mappings/mac-map-denied">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;mac-map-denied xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/mac-map-denied&gt;
+        
+        &lt;/vtn-mappings&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-mappings/vlan-mapping">
+        vtn-mappings/vlan-mapping
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mapping:vtn-mappings/vlan-mapping/{identifier}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>identifier</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>mapping</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vlan-mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;<!-- Child nodes -->
+        <!-- identifier -->
+            &lt;identifier xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/identifier&gt;
+        <!-- mapping -->
+            &lt;mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/mapping&gt;
+        
+        &lt;/vlan-mapping&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-mappings/port-mapping">
+        vtn-mappings/port-mapping
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mapping:vtn-mappings/port-mapping/{identifier}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>identifier</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>mapping</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;port-mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;<!-- Child nodes -->
+        <!-- identifier -->
+            &lt;identifier xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/identifier&gt;
+        <!-- mapping -->
+            &lt;mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/mapping&gt;
+        
+        &lt;/port-mapping&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-mappings/mac-map-allowed">
+        vtn-mappings/mac-map-allowed
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mapping:vtn-mappings/mac-map-allowed/{identifier}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>identifier</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>mapping</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;mac-map-allowed xmlns="urn:opendaylight:vtn:impl:mapping"&gt;<!-- Child nodes -->
+        <!-- identifier -->
+            &lt;identifier xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/identifier&gt;
+        <!-- mapping -->
+            &lt;mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/mapping&gt;
+        
+        &lt;/mac-map-allowed&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-mappings/mac-map-denied">
+        vtn-mappings/mac-map-denied
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mapping:vtn-mappings/mac-map-denied/{identifier}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>identifier</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-mappings/mac-map-denied/map-reference-list">map-reference-list</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;mac-map-denied xmlns="urn:opendaylight:vtn:impl:mapping"&gt;<!-- Child nodes -->
+        <!-- identifier -->
+            &lt;identifier xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/identifier&gt;
+        <!-- map-reference-list -->
+            &lt!-- See <a href="#vtn-mappings/mac-map-denied/map-reference-list">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;map-reference-list xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/map-reference-list&gt;
+        
+        &lt;/mac-map-denied&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-mappings/mac-map-denied/map-reference-list">
+        vtn-mappings/mac-map-denied/map-reference-list
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mapping:vtn-mappings/mac-map-denied/{identifier}/map-reference-list/{mapping}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>mapping</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;map-reference-list xmlns="urn:opendaylight:vtn:impl:mapping"&gt;<!-- Child nodes -->
+        <!-- mapping -->
+            &lt;mapping xmlns="urn:opendaylight:vtn:impl:mapping"&gt;...&lt;/mapping&gt;
+        
+        &lt;/map-reference-list&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

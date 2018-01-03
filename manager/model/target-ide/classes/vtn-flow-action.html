@@ -1,0 +1,3273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-flow-action</title>
+  </head>
+  <body>
+    <h1>vtn-flow-action</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vaction</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:flow:action</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-04-10</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the flow actions supported by the
+                   VTN Manager.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        l2:opendaylight-l2-types 2013-08-27;
+            yang:ietf-yang-types 2013-07-15;
+            inet:ietf-inet-types 2013-07-15;
+            action:opendaylight-action-types 2013-11-12;
+            vtype:vtn-types 2015-02-09;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-dladdr-action-fields"><strong>vtn-dladdr-action-fields</strong></a>
+            </td>
+            <td>
+            Describes the flow action fields that sets the MAC address into
+                       packet.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-ordered-flow-action"><strong>vtn-ordered-flow-action</strong></a>
+            </td>
+            <td>
+            Describes the flow action fields with `order' field.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-action-fields"><strong>vtn-action-fields</strong></a>
+            </td>
+            <td>
+            Describes the flow action fields supported by the VTN Manager.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-action-fields"><strong>vtn-port-action-fields</strong></a>
+            </td>
+            <td>
+            Describes the flow action fields that sets the port number for
+                       IP transport layer protocol into packet.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-action-list"><strong>vtn-flow-action-list</strong></a>
+            </td>
+            <td>
+            Describes a list of flow actions.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-ipaddr-action-fields"><strong>vtn-ipaddr-action-fields</strong></a>
+            </td>
+            <td>
+            Describes the flow action fields that sets the IP address into
+                       packet.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-dladdr-action-fields">vtn-dladdr-action-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the flow action fields that sets the MAC address into
+                           packet.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-ordered-flow-action">vtn-ordered-flow-action</h3>
+        <ul>
+            <li>
+                Description: Describes the flow action fields with `order' field.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: order
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action">
+                choice: vtn-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow action.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-drop-action-case">
+                case: vtn-drop-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-drop-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-drop-action-case/vtn-drop-action">
+                container: vtn-drop-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that drops every packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-pop-vlan-action-case">
+                case: vtn-pop-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-pop-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-pop-vlan-action-case/vtn-pop-vlan-action">
+                container: vtn-pop-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that strips the outermost
+                                       VLAN  tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-push-vlan-action-case">
+                case: vtn-push-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-push-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-push-vlan-action-case/vtn-push-vlan-action">
+                container: vtn-push-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that adds a VLAN tag into
+                                       packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the type for a new VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-dl-dst-action-case">
+                case: vtn-set-dl-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-dl-dst-action-case/vtn-set-dl-dst-action">
+                container: vtn-set-dl-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination  MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-dladdr-action-fields">vtn-dladdr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-dl-src-action-case">
+                case: vtn-set-dl-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-dl-src-action-case/vtn-set-dl-src-action">
+                container: vtn-set-dl-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-dladdr-action-fields">vtn-dladdr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-icmp-code-action-case">
+                case: vtn-set-icmp-code-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-code-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action">
+                container: vtn-set-icmp-code-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP code into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-ordered-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action/code">code</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-icmp-type-action-case">
+                case: vtn-set-icmp-type-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-type-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action">
+                container: vtn-set-icmp-type-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP type into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-ordered-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action/type">type</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dscp-action-case">
+                case: vtn-set-inet-dscp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dscp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action">
+                container: vtn-set-inet-dscp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified IP
+                                       DSCP value into the IP header.
+                                       Currently, only IPv4 packet can be modified by this
+                                       action.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The DSCP value to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-ordered-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action/dscp">dscp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dst-action-case">
+                case: vtn-set-inet-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action">
+                container: vtn-set-inet-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-src-action-case">
+                case: vtn-set-inet-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action">
+                container: vtn-set-inet-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-port-dst-action-case">
+                case: vtn-set-port-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action">
+                container: vtn-set-port-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-action-fields">vtn-port-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-ordered-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-port-src-action-case">
+                case: vtn-set-port-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action">
+                container: vtn-set-port-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-action-fields">vtn-port-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-ordered-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-vlan-id-action-case">
+                case: vtn-set-vlan-id-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-id-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action">
+                container: vtn-set-vlan-id-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN ID into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID to be set.
+                                           Note that zero cannot be specified. If you need
+                                           a flow action which removes VLAN tag from packets,
+                                           use `vtn-pop-vlan-action' instead.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action/vlan-id/uint16">uint16</a>
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-vlan-pcp-action-case">
+                case: vtn-set-vlan-pcp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-pcp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ordered-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action">
+                container: vtn-set-vlan-pcp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN priority into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority to be set.
+                                          If this field is omitted, it will be treated as zero
+                                          is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-ordered-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action/vlan-pcp">vlan-pcp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-action-fields">vtn-action-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the flow action fields supported by the VTN Manager.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action">
+                choice: vtn-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow action.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-drop-action-case">
+                case: vtn-drop-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-drop-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-drop-action-case/vtn-drop-action">
+                container: vtn-drop-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that drops every packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-pop-vlan-action-case">
+                case: vtn-pop-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-pop-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-pop-vlan-action-case/vtn-pop-vlan-action">
+                container: vtn-pop-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that strips the outermost
+                                       VLAN  tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-push-vlan-action-case">
+                case: vtn-push-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-push-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-push-vlan-action-case/vtn-push-vlan-action">
+                container: vtn-push-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that adds a VLAN tag into
+                                       packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the type for a new VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-dl-dst-action-case">
+                case: vtn-set-dl-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-dl-dst-action-case/vtn-set-dl-dst-action">
+                container: vtn-set-dl-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination  MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-dladdr-action-fields">vtn-dladdr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-dl-src-action-case">
+                case: vtn-set-dl-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-dl-src-action-case/vtn-set-dl-src-action">
+                container: vtn-set-dl-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-dladdr-action-fields">vtn-dladdr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-icmp-code-action-case">
+                case: vtn-set-icmp-code-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-code-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action">
+                container: vtn-set-icmp-code-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP code into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action/code">code</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-icmp-type-action-case">
+                case: vtn-set-icmp-type-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-type-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action">
+                container: vtn-set-icmp-type-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP type into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action/type">type</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dscp-action-case">
+                case: vtn-set-inet-dscp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dscp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action">
+                container: vtn-set-inet-dscp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified IP
+                                       DSCP value into the IP header.
+                                       Currently, only IPv4 packet can be modified by this
+                                       action.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The DSCP value to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action/dscp">dscp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dst-action-case">
+                case: vtn-set-inet-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action">
+                container: vtn-set-inet-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-src-action-case">
+                case: vtn-set-inet-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action">
+                container: vtn-set-inet-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-port-dst-action-case">
+                case: vtn-set-port-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action">
+                container: vtn-set-port-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-action-fields">vtn-port-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-port-src-action-case">
+                case: vtn-set-port-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action">
+                container: vtn-set-port-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-action-fields">vtn-port-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-vlan-id-action-case">
+                case: vtn-set-vlan-id-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-id-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action">
+                container: vtn-set-vlan-id-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN ID into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID to be set.
+                                           Note that zero cannot be specified. If you need
+                                           a flow action which removes VLAN tag from packets,
+                                           use `vtn-pop-vlan-action' instead.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action/vlan-id/uint16">uint16</a>
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-vlan-pcp-action-case">
+                case: vtn-set-vlan-pcp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-pcp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-action-fields/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action">
+                container: vtn-set-vlan-pcp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN priority into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority to be set.
+                                          If this field is omitted, it will be treated as zero
+                                          is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action/vlan-pcp">vlan-pcp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-port-action-fields">vtn-port-action-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the flow action fields that sets the port number for
+                           IP transport layer protocol into packet.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-port-action-fields/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-action-list">vtn-flow-action-list</h3>
+        <ul>
+            <li>
+                Description: Describes a list of flow actions.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action">
+                list: vtn-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of flow actions supported by the VTN Manager.
+                               Each action in this list needs to have a unique index value in
+                               `order' field. Flow actions in a flow entry are sorted by
+                               `order' field in ascending order.
+            </li>
+            <li>
+                key definition: order
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ordered-flow-action">vtn-ordered-flow-action</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: order
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action">
+                choice: vtn-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow action.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-drop-action-case">
+                case: vtn-drop-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-drop-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-drop-action-case/vtn-drop-action">
+                container: vtn-drop-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that drops every packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case">
+                case: vtn-pop-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-pop-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case/vtn-pop-vlan-action">
+                container: vtn-pop-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that strips the outermost
+                                       VLAN  tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-push-vlan-action-case">
+                case: vtn-push-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-push-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-push-vlan-action-case/vtn-push-vlan-action">
+                container: vtn-push-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that adds a VLAN tag into
+                                       packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the type for a new VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case">
+                case: vtn-set-dl-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case/vtn-set-dl-dst-action">
+                container: vtn-set-dl-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination  MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-dladdr-action-fields">vtn-dladdr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case">
+                case: vtn-set-dl-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case/vtn-set-dl-src-action">
+                container: vtn-set-dl-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-dladdr-action-fields">vtn-dladdr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case">
+                case: vtn-set-icmp-code-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-code-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action">
+                container: vtn-set-icmp-code-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP code into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action/code">code</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case">
+                case: vtn-set-icmp-type-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-type-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action">
+                container: vtn-set-icmp-type-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP type into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action/type">type</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case">
+                case: vtn-set-inet-dscp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dscp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action">
+                container: vtn-set-inet-dscp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified IP
+                                       DSCP value into the IP header.
+                                       Currently, only IPv4 packet can be modified by this
+                                       action.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The DSCP value to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action/dscp">dscp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case">
+                case: vtn-set-inet-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action">
+                container: vtn-set-inet-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case">
+                case: vtn-set-inet-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action">
+                container: vtn-set-inet-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case">
+                case: vtn-set-port-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action">
+                container: vtn-set-port-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-action-fields">vtn-port-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-port-src-action-case">
+                case: vtn-set-port-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action">
+                container: vtn-set-port-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-action-fields">vtn-port-action-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case">
+                case: vtn-set-vlan-id-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-id-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action">
+                container: vtn-set-vlan-id-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN ID into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID to be set.
+                                           Note that zero cannot be specified. If you need
+                                           a flow action which removes VLAN tag from packets,
+                                           use `vtn-pop-vlan-action' instead.
+            </li>
+            <li>
+                type: <a href="#vtn-action-fields/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action/vlan-id/uint16">uint16</a>
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case">
+                case: vtn-set-vlan-pcp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-pcp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action">
+                container: vtn-set-vlan-pcp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN priority into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority to be set.
+                                          If this field is omitted, it will be treated as zero
+                                          is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-action-list/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action/vlan-pcp">vlan-pcp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-ipaddr-action-fields">vtn-ipaddr-action-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the flow action fields that sets the IP address into
+                           packet.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-ipaddr-action-fields/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-ipaddr-action-fields/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-ipaddr-action-fields/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

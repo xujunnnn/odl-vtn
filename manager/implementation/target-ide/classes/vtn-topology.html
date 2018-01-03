@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-topology</title>
+  </head>
+  <body>
+    <h1>vtn-topology</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vtopo</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:impl:topology</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-02-09</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The internal module for managing network topology.
+                   Application other than VTN Manager must not use models defined in
+                   this module.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        topo:network-topology 2013-10-21;
+            vtype:vtn-types 2015-02-09;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-link-info"><strong>vtn-link-info</strong></a>
+            </td>
+            <td>
+            Information about inter-switch link.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-topology"><strong>vtn-topology</strong></a>
+            </td>
+            <td>
+            The root container of all inter-switch links recognized by the
+                       VTN Manager.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#ignored-links"><strong>ignored-links</strong></a>
+            </td>
+            <td>
+            The root container of inter-switch links ignored by the
+                       VTN Manager.
+            </td>
+        </tr>
+    </table>
+    <h3>Notifications Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#routing-updated"><strong>routing-updated</strong></a>
+            </td>
+            <td>
+            A notification which indicates that the packet routing table
+                       has been updated.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-link-info">vtn-link-info</h3>
+        <ul>
+            <li>
+                Description: Information about inter-switch link.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: link-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the inter-switch link.
+            </li>
+            <li>
+                type: (urn:TBD:params:xml:ns:yang:network-topology)link-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: source
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source switch port of the link.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination switch port of the link.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-topology</strong>
+    <ul>
+    <li>
+        <a href="#vtn-topology"><strong>vtn-topology</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#vtn-topology/vtn-link"><strong>vtn-link</strong> [link-id]
+            </a>
+            <ul>
+            <li>
+                <i>link-id</i>(U)
+            </li>
+            <li>
+                <i>source</i>(U)
+            </li>
+            <li>
+                <i>destination</i>(U)
+            </li>
+            <li>
+                static-link
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#ignored-links"><strong>ignored-links</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#ignored-links/ignored-link"><strong>ignored-link</strong> [link-id]
+            </a>
+            <ul>
+            <li>
+                <i>link-id</i>(U)
+            </li>
+            <li>
+                <i>source</i>(U)
+            </li>
+            <li>
+                <i>destination</i>(U)
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-topology">vtn-topology</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#ignored-links">ignored-links</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-topology">
+        vtn-topology
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-topology:vtn-topology</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-topology/vtn-link">vtn-link</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-topology xmlns="urn:opendaylight:vtn:impl:topology"&gt;<!-- Child nodes -->
+        <!-- vtn-link -->
+            &lt!-- See <a href="#vtn-topology/vtn-link">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-link xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/vtn-link&gt;
+        
+        &lt;/vtn-topology&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-topology/vtn-link">
+        vtn-topology/vtn-link
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-topology:vtn-topology/vtn-link/{link-id}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>link-id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>source</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>destination</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>static-link</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-link xmlns="urn:opendaylight:vtn:impl:topology"&gt;<!-- Child nodes -->
+        <!-- link-id -->
+            &lt;link-id xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/link-id&gt;
+        <!-- source -->
+            &lt;source xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/source&gt;
+        <!-- destination -->
+            &lt;destination xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/destination&gt;
+        <!-- static-link -->
+            &lt;static-link xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/static-link&gt;
+        
+        &lt;/vtn-link&gt;
+    </pre>
+    </h3>
+    <h3 id="ignored-links">
+        ignored-links
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-topology:ignored-links</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#ignored-links/ignored-link">ignored-link</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;ignored-links xmlns="urn:opendaylight:vtn:impl:topology"&gt;<!-- Child nodes -->
+        <!-- ignored-link -->
+            &lt!-- See <a href="#ignored-links/ignored-link">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;ignored-link xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/ignored-link&gt;
+        
+        &lt;/ignored-links&gt;
+    </pre>
+    </h3>
+    <h3 id="ignored-links/ignored-link">
+        ignored-links/ignored-link
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-topology:ignored-links/ignored-link/{link-id}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>link-id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>source</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>destination</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;ignored-link xmlns="urn:opendaylight:vtn:impl:topology"&gt;<!-- Child nodes -->
+        <!-- link-id -->
+            &lt;link-id xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/link-id&gt;
+        <!-- source -->
+            &lt;source xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/source&gt;
+        <!-- destination -->
+            &lt;destination xmlns="urn:opendaylight:vtn:impl:topology"&gt;...&lt;/destination&gt;
+        
+        &lt;/ignored-link&gt;
+    </pre>
+    </h3>
+    
+    <h2>Notifications</h2>
+    
+    <h3 id="routing-updated">routing-updated
+    </h3>
+        A notification which indicates that the packet routing table
+                   has been updated.
+        <ul>
+        <strong>
+        <li id="routing-updated/added-link">
+            list: added-link
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: A list of inter-switch links added to the packet routing
+                           table.
+        </li>
+        </ul>
+        <ul>
+        <strong><li>
+            uses: <a href="#vtn-link-info">vtn-link-info</a>
+        </li>
+        </strong>
+        <ul>
+        <li>refines:
+            <ul>
+            </ul>
+        </li>
+        </ul>
+        </ul>
+        <ul>
+        </ul>
+        <ul>
+        </ul>
+        <ul>
+        <ul>
+        <strong><li>
+            leaf: link-id
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: The identifier of the inter-switch link.
+        </li>
+        <li>
+            type: (urn:TBD:params:xml:ns:yang:network-topology)link-id
+        </li>
+        </ul>
+        </ul>
+        <ul>
+        <strong><li>
+            leaf: source
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: The source switch port of the link.
+        </li>
+        <li>
+            type: (urn:opendaylight:inventory)node-connector-id
+        </li>
+        </ul>
+        </ul>
+        <ul>
+        <strong><li>
+            leaf: destination
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: The destination switch port of the link.
+        </li>
+        <li>
+            type: (urn:opendaylight:inventory)node-connector-id
+        </li>
+        </ul>
+        </ul>
+        </ul>
+        </ul>
+        <ul>
+        <strong>
+        <li id="routing-updated/removed-link">
+            list: removed-link
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: A list of inter-switch links removed from the packet routing
+                           table.
+        </li>
+        </ul>
+        <ul>
+        <strong><li>
+            uses: <a href="#vtn-link-info">vtn-link-info</a>
+        </li>
+        </strong>
+        <ul>
+        <li>refines:
+            <ul>
+            </ul>
+        </li>
+        </ul>
+        </ul>
+        <ul>
+        </ul>
+        <ul>
+        </ul>
+        <ul>
+        <ul>
+        <strong><li>
+            leaf: link-id
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: The identifier of the inter-switch link.
+        </li>
+        <li>
+            type: (urn:TBD:params:xml:ns:yang:network-topology)link-id
+        </li>
+        </ul>
+        </ul>
+        <ul>
+        <strong><li>
+            leaf: source
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: The source switch port of the link.
+        </li>
+        <li>
+            type: (urn:opendaylight:inventory)node-connector-id
+        </li>
+        </ul>
+        </ul>
+        <ul>
+        <strong><li>
+            leaf: destination
+        </li>
+        </strong>
+        <ul>
+        <li>
+            description: The destination switch port of the link.
+        </li>
+        <li>
+            type: (urn:opendaylight:inventory)node-connector-id
+        </li>
+        </ul>
+        </ul>
+        </ul>
+        </ul>
+    
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-types</title>
+  </head>
+  <body>
+    <h1>vtn-types</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vtype</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:types</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-02-09</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that descripes various data types used by the VTN Manager.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        l2:opendaylight-l2-types 2013-08-27;
+            yang:ietf-yang-types 2013-07-15;
+            action:opendaylight-action-types 2013-11-12;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <div>
+        <h3>Type Definitions Summary</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vnode-name"><strong>vnode-name</strong></a>
+                </td>
+                <td>
+                The name of the virtual node.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vnode-state"><strong>vnode-state</strong></a>
+                </td>
+                <td>
+                Describes the state of the virtual node in the VTN.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vnode-update-mode"><strong>vnode-update-mode</strong></a>
+                </td>
+                <td>
+                Describes how to update a virtual node.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vtn-update-type"><strong>vtn-update-type</strong></a>
+                </td>
+                <td>
+                Describes the result of the operation that updates the
+                           configuration.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vtn-error-tag"><strong>vtn-error-tag</strong></a>
+                </td>
+                <td>
+                Describes the generic error conditions.
+                           VTN RPC will set one of below values as a string into
+                           application tag in RPC error when it fails.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vtn-update-operation-type"><strong>vtn-update-operation-type</strong></a>
+                </td>
+                <td>
+                Describes how to update existing resources.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vtn-acl-type"><strong>vtn-acl-type</strong></a>
+                </td>
+                <td>
+                Describes the type of access control list.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vlan-host-desc"><strong>vlan-host-desc</strong></a>
+                </td>
+                <td>
+                Describes the host in VLAN.
+                           The value must be a pair of MAC address and VLAN ID joined with
+                           `@'.
+                
+                           The first element must be a string representation of MAC
+                           address in lower-case hex format (e.g. 00:11:22:33:aa) or an
+                           empty string. An empty string implies that the MAC address is
+                           not specified.
+                
+                           The second element must be a string representation of VLAN ID
+                           in decimal format. Zero means the untagged Ethernet frame.
+                           Note that VLAN ID is mandatory.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vtn-port-desc"><strong>vtn-port-desc</strong></a>
+                </td>
+                <td>
+                Describes the location of the physical switch port.
+                           The value must be a comma-separated list that has 3 elements.
+                
+                           The first element must be a node-id which specifies the
+                           physical switch.
+                
+                           If the second element is not empty, it is treated as the
+                           identifier of the node connector corresponding to the physical
+                           switch port. A string representation (in decimal) of the port
+                           number for the physical switch port needs to be specified when
+                           you specify the OpenFlow switch port.
+                
+                           If the third element is not empty, it is treated as the name of
+                           the physical switch port.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vlan-type"><strong>vlan-type</strong></a>
+                </td>
+                <td>
+                Describes the VLAN type supported by the VTN Manager.
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-location"><strong>vtn-port-location</strong></a>
+            </td>
+            <td>
+            Describes the location of the physical switch port.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-switch-port"><strong>vtn-switch-port</strong></a>
+            </td>
+            <td>
+            Describes the location of the physical swtich port.
+            
+                       This model describes only the information that identifies the port
+                       within a physical swtich, and does not describes the information
+                       that identifies the physical switch.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vnode-path-fields"><strong>vnode-path-fields</strong></a>
+            </td>
+            <td>
+            Describes a set of fields which specify the location of the
+                       virtual node inside the VTN.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vlan-host"><strong>vlan-host</strong></a>
+            </td>
+            <td>
+            Describes the host in VLAN.
+                       A host in VLAN is specified by a pair of MAC address and VLAN ID.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-index"><strong>vtn-index</strong></a>
+            </td>
+            <td>
+            Describes an int32 fields named `index' that determines the
+                       order of elements in a list.
+                       Unlike `ordered-list', a value for `index' field is limited from
+                       1 to 65535.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-switch-link"><strong>vtn-switch-link</strong></a>
+            </td>
+            <td>
+            Describes an inter-switch link.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vbridge-path-fields"><strong>vbridge-path-fields</strong></a>
+            </td>
+            <td>
+            Describes a set of fields which specify the location of the
+                       vBridge inside the VTN.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-vlan-id-field"><strong>vtn-vlan-id-field</strong></a>
+            </td>
+            <td>
+            Describes a field which specifies the VLAN ID.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-timeout-config"><strong>vtn-flow-timeout-config</strong></a>
+            </td>
+            <td>
+            Describes configurations for flow entry timeout.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-rpc-result"><strong>vtn-rpc-result</strong></a>
+            </td>
+            <td>
+            Describes the generic information of the RPC result.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vterminal-path-fields"><strong>vterminal-path-fields</strong></a>
+            </td>
+            <td>
+            Describes a set of fields which specify the location of the
+                       vTerminal inside the VTN.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vlan-host-desc-set"><strong>vlan-host-desc-set</strong></a>
+            </td>
+            <td>
+            Describes a set of `vlan-host-desc' values.
+            </td>
+        </tr>
+    </table>
+    
+    <h2>Type Definitions</h2>
+    <ul>
+    <li>
+        <h3 id="vnode-name">vnode-name</h3>
+        <ul>
+        <li>
+            Description: The name of the virtual node.
+        </li>
+        <li>
+            Base type: (urn:ietf:params:xml:ns:yang:1)string
+        </li>
+        <li>
+            Length restrictions:
+        </li>
+        <ul>
+        <li>
+        &lt;1, 31&gt;
+        </li>
+        </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vnode-state">vnode-state</h3>
+        <ul>
+        <li>
+            Description: Describes the state of the virtual node in the VTN.
+        </li>
+        <li>
+            Base type: <a href="#vnode-state/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vnode-update-mode">vnode-update-mode</h3>
+        <ul>
+        <li>
+            Description: Describes how to update a virtual node.
+        </li>
+        <li>
+            Base type: <a href="#vnode-update-mode/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-update-type">vtn-update-type</h3>
+        <ul>
+        <li>
+            Description: Describes the result of the operation that updates the
+                       configuration.
+        </li>
+        <li>
+            Base type: <a href="#vtn-update-type/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-error-tag">vtn-error-tag</h3>
+        <ul>
+        <li>
+            Description: Describes the generic error conditions.
+                       VTN RPC will set one of below values as a string into
+                       application tag in RPC error when it fails.
+        </li>
+        <li>
+            Base type: <a href="#vtn-error-tag/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-update-operation-type">vtn-update-operation-type</h3>
+        <ul>
+        <li>
+            Description: Describes how to update existing resources.
+        </li>
+        <li>
+            Base type: <a href="#vtn-update-operation-type/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-acl-type">vtn-acl-type</h3>
+        <ul>
+        <li>
+            Description: Describes the type of access control list.
+        </li>
+        <li>
+            Base type: <a href="#vtn-acl-type/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vlan-host-desc">vlan-host-desc</h3>
+        <ul>
+        <li>
+            Description: Describes the host in VLAN.
+                       The value must be a pair of MAC address and VLAN ID joined with
+                       `@'.
+            
+                       The first element must be a string representation of MAC
+                       address in lower-case hex format (e.g. 00:11:22:33:aa) or an
+                       empty string. An empty string implies that the MAC address is
+                       not specified.
+            
+                       The second element must be a string representation of VLAN ID
+                       in decimal format. Zero means the untagged Ethernet frame.
+                       Note that VLAN ID is mandatory.
+        </li>
+        <li>
+            Base type: (urn:ietf:params:xml:ns:yang:1)string
+        </li>
+        <li>
+            Length restrictions:
+        </li>
+        <ul>
+        <li>
+        &lt;0, 2147483647&gt;
+        </li>
+        </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-port-desc">vtn-port-desc</h3>
+        <ul>
+        <li>
+            Description: Describes the location of the physical switch port.
+                       The value must be a comma-separated list that has 3 elements.
+            
+                       The first element must be a node-id which specifies the
+                       physical switch.
+            
+                       If the second element is not empty, it is treated as the
+                       identifier of the node connector corresponding to the physical
+                       switch port. A string representation (in decimal) of the port
+                       number for the physical switch port needs to be specified when
+                       you specify the OpenFlow switch port.
+            
+                       If the third element is not empty, it is treated as the name of
+                       the physical switch port.
+        </li>
+        <li>
+            Base type: (urn:ietf:params:xml:ns:yang:1)string
+        </li>
+        <li>
+            Length restrictions:
+        </li>
+        <ul>
+        <li>
+        &lt;0, 2147483647&gt;
+        </li>
+        </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vlan-type">vlan-type</h3>
+        <ul>
+        <li>
+            Description: Describes the VLAN type supported by the VTN Manager.
+        </li>
+        <li>
+            Base type: <a href="#vlan-type/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-port-location">vtn-port-location</h3>
+        <ul>
+            <li>
+                Description: Describes the location of the physical switch port.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: <a href="#vtn-switch-port/port-name/string">string</a>
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-switch-port">vtn-switch-port</h3>
+        <ul>
+            <li>
+                Description: Describes the location of the physical swtich port.
+                
+                           This model describes only the information that identifies the port
+                           within a physical swtich, and does not describes the information
+                           that identifies the physical switch.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: <a href="#vtn-switch-port/port-name/string">string</a>
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vnode-path-fields">vnode-path-fields</h3>
+        <ul>
+            <li>
+                Description: Describes a set of fields which specify the location of the
+                           virtual node inside the VTN.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vlan-host">vlan-host</h3>
+        <ul>
+            <li>
+                Description: Describes the host in VLAN.
+                           A host in VLAN is specified by a pair of MAC address and VLAN ID.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address of the host.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-index">vtn-index</h3>
+        <ul>
+            <li>
+                Description: Describes an int32 fields named `index' that determines the
+                           order of elements in a list.
+                           Unlike `ordered-list', a value for `index' field is limited from
+                           1 to 65535.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: <a href="#vtn-index/index/int32">int32</a>
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-switch-link">vtn-switch-link</h3>
+        <ul>
+            <li>
+                Description: Describes an inter-switch link.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: source
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source switch port of the link.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination switch port of the link.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vbridge-path-fields">vbridge-path-fields</h3>
+        <ul>
+            <li>
+                Description: Describes a set of fields which specify the location of the
+                           vBridge inside the VTN.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-vlan-id-field">vtn-vlan-id-field</h3>
+        <ul>
+            <li>
+                Description: Describes a field which specifies the VLAN ID.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-timeout-config">vtn-flow-timeout-config</h3>
+        <ul>
+            <li>
+                Description: Describes configurations for flow entry timeout.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: idle-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `idle-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: hard-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `hard-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-rpc-result">vtn-rpc-result</h3>
+        <ul>
+            <li>
+                Description: Describes the generic information of the RPC result.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: <a href="#vtn-update-type">vtn-update-type</a>
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vterminal-path-fields">vterminal-path-fields</h3>
+        <ul>
+            <li>
+                Description: Describes a set of fields which specify the location of the
+                           vTerminal inside the VTN.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vlan-host-desc-set">vlan-host-desc-set</h3>
+        <ul>
+            <li>
+                Description: Describes a set of `vlan-host-desc' values.
+            </li>
+            <ul>
+            <strong>
+            <li id="vlan-host-desc-set/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: <a href="#vlan-host-desc">vlan-host-desc</a>
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

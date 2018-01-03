@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-inventory</title>
+  </head>
+  <body>
+    <h1>vtn-inventory</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vinv</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:impl:inventory</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-02-09</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The internal module for managing inventories.
+                   Application other than VTN Manager must not use models defined in
+                   this module.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        topo:network-topology 2013-10-21;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <div>
+        <h3>Type Definitions Summary</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>
+                <a href="#vtn-openflow-version"><strong>vtn-openflow-version</strong></a>
+                </td>
+                <td>
+                Describes the OpenFlow protocol version number.
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-info"><strong>vtn-port-info</strong></a>
+            </td>
+            <td>
+            Generic information about a switch port managed by the
+                       VTN Manager.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-node-info"><strong>vtn-node-info</strong></a>
+            </td>
+            <td>
+            Generic information about a node managed by the VTN Manager.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-nodes"><strong>vtn-nodes</strong></a>
+            </td>
+            <td>
+            The root container of all nodes managed by the VTN Manager.
+            </td>
+        </tr>
+    </table>
+    
+    <h2>Type Definitions</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-openflow-version">vtn-openflow-version</h3>
+        <ul>
+        <li>
+            Description: Describes the OpenFlow protocol version number.
+        </li>
+        <li>
+            Base type: <a href="#vtn-openflow-version/enumeration">enumeration</a>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-port-info">vtn-port-info</h3>
+        <ul>
+            <li>
+                Description: Generic information about a switch port managed by the
+                           VTN Manager.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The unique identifier for the switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Human readable name of the switch port.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: enabled
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the switch port is enabled or not.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The cost of the link for transmitting a packet from this port.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int64
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-port-info/port-link">
+                list: port-link
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of inter-switch links.
+            </li>
+            <li>
+                key definition: link-id
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: link-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the inter-switch link.
+            </li>
+            <li>
+                type: (urn:TBD:params:xml:ns:yang:network-topology)link-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: peer
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the peer switch port of the link.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-node-info">vtn-node-info</h3>
+        <ul>
+            <li>
+                Description: Generic information about a node managed by the VTN Manager.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The unique identifier for the switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: openflow-version
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Estimated OpenFlow protocol version currently used on the
+                               secure channel.
+            </li>
+            <li>
+                type: <a href="#vtn-openflow-version">vtn-openflow-version</a>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-node-info/vtn-port">
+                list: vtn-port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of physical switch ports that belong this node.
+            </li>
+            <li>
+                key definition: id
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-info">vtn-port-info</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The unique identifier for the switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Human readable name of the switch port.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: enabled
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the switch port is enabled or not.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The cost of the link for transmitting a packet from this port.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int64
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-node-info/vtn-port/port-link">
+                list: port-link
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of inter-switch links.
+            </li>
+            <li>
+                key definition: link-id
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: link-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the inter-switch link.
+            </li>
+            <li>
+                type: (urn:TBD:params:xml:ns:yang:network-topology)link-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: peer
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the peer switch port of the link.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-inventory</strong>
+    <ul>
+    <li>
+        <a href="#vtn-nodes"><strong>vtn-nodes</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#vtn-nodes/vtn-node"><strong>vtn-node</strong> [id]
+            </a>
+            <ul>
+            <li>
+                <i>id</i>(U)
+            </li>
+            <li>
+                <i>openflow-version</i>(U)
+            </li>
+            <li>
+                <a href="#vtn-nodes/vtn-node/vtn-port"><strong><i>vtn-port</i></strong> [id]
+                (U)
+                </a>
+                <ul>
+                <li>
+                    <i>id</i>(U)
+                </li>
+                <li>
+                    <i>name</i>(U)
+                </li>
+                <li>
+                    <i>enabled</i>(U)
+                </li>
+                <li>
+                    <i>cost</i>(U)
+                </li>
+                <li>
+                    <a href="#vtn-nodes/vtn-node/vtn-port/port-link"><strong><i>port-link</i></strong> [link-id]
+                    (U)
+                    </a>
+                    <ul>
+                    <li>
+                        <i>link-id</i>(U)
+                    </li>
+                    <li>
+                        <i>peer</i>(U)
+                    </li>
+                    </ul>
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-nodes">vtn-nodes</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-nodes">
+        vtn-nodes
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-inventory:vtn-nodes</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-nodes/vtn-node">vtn-node</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-nodes xmlns="urn:opendaylight:vtn:impl:inventory"&gt;<!-- Child nodes -->
+        <!-- vtn-node -->
+            &lt!-- See <a href="#vtn-nodes/vtn-node">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-node xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/vtn-node&gt;
+        
+        &lt;/vtn-nodes&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-nodes/vtn-node">
+        vtn-nodes/vtn-node
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-inventory:vtn-nodes/vtn-node/{id}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>openflow-version</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-nodes/vtn-node/vtn-port">vtn-port</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-node xmlns="urn:opendaylight:vtn:impl:inventory"&gt;<!-- Child nodes -->
+        <!-- id -->
+            &lt;id xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/id&gt;
+        <!-- openflow-version -->
+            &lt;openflow-version xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/openflow-version&gt;
+        <!-- vtn-port -->
+            &lt!-- See <a href="#vtn-nodes/vtn-node/vtn-port">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-port xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/vtn-port&gt;
+        
+        &lt;/vtn-node&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-nodes/vtn-node/vtn-port">
+        vtn-nodes/vtn-node/vtn-port
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-inventory:vtn-nodes/vtn-node/{id}/vtn-port/{id}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>enabled</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>cost</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-nodes/vtn-node/vtn-port/port-link">port-link</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-port xmlns="urn:opendaylight:vtn:impl:inventory"&gt;<!-- Child nodes -->
+        <!-- id -->
+            &lt;id xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/id&gt;
+        <!-- name -->
+            &lt;name xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/name&gt;
+        <!-- enabled -->
+            &lt;enabled xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/enabled&gt;
+        <!-- cost -->
+            &lt;cost xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/cost&gt;
+        <!-- port-link -->
+            &lt!-- See <a href="#vtn-nodes/vtn-node/vtn-port/port-link">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;port-link xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/port-link&gt;
+        
+        &lt;/vtn-port&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-nodes/vtn-node/vtn-port/port-link">
+        vtn-nodes/vtn-node/vtn-port/port-link
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-inventory:vtn-nodes/vtn-node/{id}/vtn-port/{id}/port-link/{link-id}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>link-id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>peer</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;port-link xmlns="urn:opendaylight:vtn:impl:inventory"&gt;<!-- Child nodes -->
+        <!-- link-id -->
+            &lt;link-id xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/link-id&gt;
+        <!-- peer -->
+            &lt;peer xmlns="urn:opendaylight:vtn:impl:inventory"&gt;...&lt;/peer&gt;
+        
+        &lt;/port-link&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

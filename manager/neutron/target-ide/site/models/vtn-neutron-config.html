@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-neutron-config</title>
+  </head>
+  <body>
+    <h1>vtn-neutron-config</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vtn-neutron-config</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:neutron:config</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2016-07-01</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the configuration for VTN neutron service.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+    
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-neutron-config"><strong>vtn-neutron-config</strong></a>
+            </td>
+            <td>
+            The configuration for VTN neutron service.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-neutron-config</strong>
+    <ul>
+    <li>
+        <a href="#vtn-neutron-config"><strong>vtn-neutron-config</strong>
+        </a>
+        <ul>
+        <li>
+            bridge-name
+        </li>
+        <li>
+            port-name
+        </li>
+        <li>
+            protocol
+        </li>
+        <li>
+            fail-mode
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-neutron-config">vtn-neutron-config</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-neutron-config">
+        vtn-neutron-config
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-neutron-config:vtn-neutron-config</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>bridge-name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>protocol</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>fail-mode</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-neutron-config xmlns="urn:opendaylight:vtn:neutron:config"&gt;<!-- Child nodes -->
+        <!-- bridge-name -->
+            &lt;bridge-name xmlns="urn:opendaylight:vtn:neutron:config"&gt;...&lt;/bridge-name&gt;
+        <!-- port-name -->
+            &lt;port-name xmlns="urn:opendaylight:vtn:neutron:config"&gt;...&lt;/port-name&gt;
+        <!-- protocol -->
+            &lt;protocol xmlns="urn:opendaylight:vtn:neutron:config"&gt;...&lt;/protocol&gt;
+        <!-- fail-mode -->
+            &lt;fail-mode xmlns="urn:opendaylight:vtn:neutron:config"&gt;...&lt;/fail-mode&gt;
+        
+        &lt;/vtn-neutron-config&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

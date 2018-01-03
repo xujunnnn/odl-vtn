@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-port-map</title>
+  </head>
+  <body>
+    <h1>vtn-port-map</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>portmap</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:mapping:port</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-09-07</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the data models for port mapping, which
+                   associates a physical switch port with a virtual interface in VTN.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        vtype:vtn-types 2015-02-09;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-map-config"><strong>vtn-port-map-config</strong></a>
+            </td>
+            <td>
+            Describes configuration for a port mapping.
+            
+                       Actual physical port of switch that gets mapped to a virtual
+                       interface is decided as follows:
+            
+                         - If `port-name' field is configured, then out of physical ports
+                           in the switch specified by `node' field, the physical port that
+                           has the specified port name will get mapped.
+            
+                         - If `port-id' field is configured, the out of the physical ports
+                           in the switch specified by `node' field, the physical port
+                           corresponding to the specified port ID will get mapped.
+            
+                         - If both `port-name' and `port-id' are configured, the out of
+                           the physical ports in the switch specified by `node' field,
+                           the physical port that has the specified port name and port ID
+                           will get mapped.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-mappable"><strong>vtn-port-mappable</strong></a>
+            </td>
+            <td>
+            Describes the data model which can contain port mapping
+                       configuration.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-port-map"><strong>remove-port-map</strong></a>
+            </td>
+            <td>
+            Remove port mapping configuration from the specified virtual
+                       interface.
+            
+                       The target virtual interface is determined by the RPC input.
+                       If `bridge-name' field in the RPC input is configured, port
+                       mapping configured in the virtual interface attached to the
+                       vBridge specified by `tenant-name' and `bridge-name' will be
+                       removed.
+                       If `bridge-name' field is omitted and `terminal-name' field in
+                       the RPC input is configured, port mapping configured in the
+                       virtual interface attached to the vTerminal specified by
+                       `tenant-name' and `terminal-name' will be removed.
+            
+                       Upon successful completion, the result of this operation will
+                       be set to the `status' field in the RPC output.
+            
+                       `REMOVED' indicates that port mapping configuration has been
+                       removed successfully from the virtual interface specified by the
+                       RPC input.
+            
+                       Null indicates that port mapping configuration is not present in
+                       the virtual interface specified by the RPC input.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `NOTFOUND' is set if the vTerminal specified by `tenant-name' and
+                       `terminal-name' is not present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `NOTFOUND' is set if the virtual interface specified by
+                       `tenant-name' and `bridge-name' (or `terminal-name') and
+                       `interface-name' is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-port-map"><strong>set-port-map</strong></a>
+            </td>
+            <td>
+            Configure port mapping in the specified virtual interface.
+            
+                       The target virtual interface is determined by the RPC input.
+                       If `bridge-name' field in the RPC input is configured, port
+                       mapping is configured in the virtual interface attached to the
+                       vBridge specified by `tenant-name' and `bridge-name'.
+                       If `bridge-name' field is omitted and `terminal-name' field in
+                       the RPC input is configured, port mapping is configured in the
+                       virtual interface attached to the vTerminal specified by
+                       `tenant-name' and `terminal-name'.
+            
+                       If port mapping is already configured in the specified virtual
+                       interface, the specified settins are applied after old
+                       configuration is deleted.
+            
+                       Upon successful completion, the result of this operation will
+                       be set to the `status' field in the RPC output.
+            
+                       `CREATED' indicates that new port mapping configuration has been
+                       created successfully.
+            
+                       `CHANGED' indicates that old port mapping configuration has been
+                       replaced with the configuration specified by the RPC input.
+            
+                       Null indicates that the port mapping configuration specified by
+                       the RPC input is already applied to the specified virtual
+                       interface.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `NOTFOUND' is set if the vTerminal specified by `tenant-name' and
+                       `terminal-name' is not present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `NOTFOUND' is set if the virtual interface specified by
+                       `tenant-name' and `bridge-name' (or `terminal-name') and
+                       `interface-name' is not present.
+            
+                       `CONFLICT' is set if the specified combination of physical
+                       switch port and VLAN ID is mapped to another virtual interface.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-port-map-config">vtn-port-map-config</h3>
+        <ul>
+            <li>
+                Description: Describes configuration for a port mapping.
+                
+                           Actual physical port of switch that gets mapped to a virtual
+                           interface is decided as follows:
+                
+                             - If `port-name' field is configured, then out of physical ports
+                               in the switch specified by `node' field, the physical port that
+                               has the specified port name will get mapped.
+                
+                             - If `port-id' field is configured, the out of the physical ports
+                               in the switch specified by `node' field, the physical port
+                               corresponding to the specified port ID will get mapped.
+                
+                             - If both `port-name' and `port-id' are configured, the out of
+                               the physical ports in the switch specified by `node' field,
+                               the physical port that has the specified port name and port ID
+                               will get mapped.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-port-mappable">vtn-port-mappable</h3>
+        <ul>
+            <li>
+                Description: Describes the data model which can contain port mapping
+                           configuration.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-port-mappable/port-map-config">
+                container: port-map-config
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains port mapping configuration,
+                               which maps a physical switch port to a virtual interface in
+                               a virtual node.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-map-config">vtn-port-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="remove-port-map">remove-port-map
+    </h3>
+        <ul>
+            <li>
+                Description: Remove port mapping configuration from the specified virtual
+                           interface.
+                
+                           The target virtual interface is determined by the RPC input.
+                           If `bridge-name' field in the RPC input is configured, port
+                           mapping configured in the virtual interface attached to the
+                           vBridge specified by `tenant-name' and `bridge-name' will be
+                           removed.
+                           If `bridge-name' field is omitted and `terminal-name' field in
+                           the RPC input is configured, port mapping configured in the
+                           virtual interface attached to the vTerminal specified by
+                           `tenant-name' and `terminal-name' will be removed.
+                
+                           Upon successful completion, the result of this operation will
+                           be set to the `status' field in the RPC output.
+                
+                           `REMOVED' indicates that port mapping configuration has been
+                           removed successfully from the virtual interface specified by the
+                           RPC input.
+                
+                           Null indicates that port mapping configuration is not present in
+                           the virtual interface specified by the RPC input.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `NOTFOUND' is set if the vTerminal specified by `tenant-name' and
+                           `terminal-name' is not present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `NOTFOUND' is set if the virtual interface specified by
+                           `tenant-name' and `bridge-name' (or `terminal-name') and
+                           `interface-name' is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-port-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-port-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="set-port-map">set-port-map
+    </h3>
+        <ul>
+            <li>
+                Description: Configure port mapping in the specified virtual interface.
+                
+                           The target virtual interface is determined by the RPC input.
+                           If `bridge-name' field in the RPC input is configured, port
+                           mapping is configured in the virtual interface attached to the
+                           vBridge specified by `tenant-name' and `bridge-name'.
+                           If `bridge-name' field is omitted and `terminal-name' field in
+                           the RPC input is configured, port mapping is configured in the
+                           virtual interface attached to the vTerminal specified by
+                           `tenant-name' and `terminal-name'.
+                
+                           If port mapping is already configured in the specified virtual
+                           interface, the specified settins are applied after old
+                           configuration is deleted.
+                
+                           Upon successful completion, the result of this operation will
+                           be set to the `status' field in the RPC output.
+                
+                           `CREATED' indicates that new port mapping configuration has been
+                           created successfully.
+                
+                           `CHANGED' indicates that old port mapping configuration has been
+                           replaced with the configuration specified by the RPC input.
+                
+                           Null indicates that the port mapping configuration specified by
+                           the RPC input is already applied to the specified virtual
+                           interface.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `NOTFOUND' is set if the vTerminal specified by `tenant-name' and
+                           `terminal-name' is not present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `NOTFOUND' is set if the virtual interface specified by
+                           `tenant-name' and `bridge-name' (or `terminal-name') and
+                           `interface-name' is not present.
+                
+                           `CONFLICT' is set if the specified combination of physical
+                           switch port and VLAN ID is mapped to another virtual interface.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-port-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            <strong><li>
+                uses: <a href="#vtn-port-map-config">vtn-port-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-port-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

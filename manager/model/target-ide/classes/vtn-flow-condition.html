@@ -1,0 +1,5128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-flow-condition</title>
+  </head>
+  <body>
+    <h1>vtn-flow-condition</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vfcond</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:flow:cond</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-03-13</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the flow condition to match against packets.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        l2:opendaylight-l2-types 2013-08-27;
+            yang:ietf-yang-types 2013-07-15;
+            inet:ietf-inet-types 2013-07-15;
+            vtype:vtn-types 2015-02-09;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-inet-match-fields"><strong>vtn-inet-match-fields</strong></a>
+            </td>
+            <td>
+            Describes the IP header fields to match against packets.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-ether-match-fields"><strong>vtn-ether-match-fields</strong></a>
+            </td>
+            <td>
+            Describes the ethernet header and IEEE 802.1Q VLAN tag fields
+                       to match against packets.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-cond-config"><strong>vtn-flow-cond-config</strong></a>
+            </td>
+            <td>
+            Describes the configuration for a VTN flow condition.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-icmp-match-fields"><strong>vtn-icmp-match-fields</strong></a>
+            </td>
+            <td>
+            Describes the ICMP header fields to match against packets.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-udp-match-fields"><strong>vtn-udp-match-fields</strong></a>
+            </td>
+            <td>
+            Describes the range of UDP port numbers.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-match-config"><strong>vtn-flow-match-config</strong></a>
+            </td>
+            <td>
+            Describes the configuration for a VTN flow match in a VTN flow
+                       condition.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-match-fields"><strong>vtn-match-fields</strong></a>
+            </td>
+            <td>
+            Describes the configuration for a VTN flow match that specifies
+                       the condition to match against packets.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-range"><strong>vtn-port-range</strong></a>
+            </td>
+            <td>
+            Describes the range of IP transport layer protocol such as TCP.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-match-result"><strong>vtn-flow-match-result</strong></a>
+            </td>
+            <td>
+            Describes a pair of VTN flow match index and `vtn-update-type'.
+            
+                       This grouping is used as output of RPC that modifies the VTN flow
+                       match configuration in a flow condition.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-tcp-match-fields"><strong>vtn-tcp-match-fields</strong></a>
+            </td>
+            <td>
+            Describes the range of TCP port numbers.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-conditions"><strong>vtn-flow-conditions</strong></a>
+            </td>
+            <td>
+            The root container of all the flow condition configuratins.
+                       Note that the flow condition configuration must be modified by RPC.
+                       Do not edit this container directly.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-flow-condition-match"><strong>set-flow-condition-match</strong></a>
+            </td>
+            <td>
+            Configure a flow match condition into the flow condition specified
+                       by the flow condition name and match index.
+            
+                       This operation takes a list of `vtn-flow-match-config', and
+                       put all configurations in that list into the specified flow
+                       condition.
+            
+                       Match indices specified in the RPC input will be copied to the
+                       RPC output, and `status' field in `vtn-flow-match-result' describes
+                       the result of the operation.
+            
+                       `CREATED` indicates that the flow match configuration specified by
+                       the index value has been newly created.
+            
+                       `CHANGED' indicates that the flow match configuration specified by
+                       the index value has been successfully changed.
+            
+                       Null indicates that the flow match configuration specified by
+                       the index value was not changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the specified flow condition is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-flow-condition"><strong>set-flow-condition</strong></a>
+            </td>
+            <td>
+            Create or modify the flow condition.
+            
+                       If the flow condition specified by the name does not exist, a new
+                       flow condition will be associated with the specified name.
+                       If the flow condition specifie dby the name already exists,
+                       it will be modified as specified the RPC input.
+            
+                       `status' in RPC output descripts the result of the operation.
+            
+                       `CREATED' indicates that the specified flow condition has been
+                       newly created.
+            
+                       `CHANGED' indicates that existing flow condition configuraiton has
+                       been successfully changed.
+            
+                       Null indicates that existing flow condition configuration has not
+                       been changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if true is set to `present' field in the RPC
+                       input and the target flow condition is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-flow-condition-match"><strong>remove-flow-condition-match</strong></a>
+            </td>
+            <td>
+            Remove the flow match condition specified by the flow condition
+                       name and match index.
+            
+                       Values passed to `match-index' list will be copied to the RPC
+                       output, and `status' field in `vtn-flow-match-result' describes
+                       the result of the operation.
+            
+                       `REMOVED' indicates that the flow match associated with the match
+                       index has been successfully removed.
+            
+                       Null indicates that the flow match is not associated with the
+                       match index in the specified flow condition.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the specified flow condition is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#clear-flow-condition"><strong>clear-flow-condition</strong></a>
+            </td>
+            <td>
+            Remove all the flow conditions.
+            
+                       `status' in RPC output descripts the result of the operation.
+            
+                       `REMOVED' indicates that at least one flow condition has been
+                       removed.
+            
+                       Null indicates that no flow condition is present.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-flow-condition"><strong>remove-flow-condition</strong></a>
+            </td>
+            <td>
+            Remove the flow condition specified by the name.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the specified flow condition is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-inet-match-fields">vtn-inet-match-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the IP header fields to match against packets.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: source-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the source IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the destination IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: protocol
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP protocol number.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP DSCP field value.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)dscp
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-ether-match-fields">vtn-ether-match-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the ethernet header and IEEE 802.1Q VLAN tag fields
+                           to match against packets.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: source-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ether-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ethernet type.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)ether-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID in VLAN tag.
+                               Zero means untagged ethernet frame.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority in VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-pcp
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-cond-config">vtn-flow-cond-config</h3>
+        <ul>
+            <li>
+                Description: Describes the configuration for a VTN flow condition.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match">
+                list: vtn-flow-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of conditions to match against packets.
+                               Each element in this list needs to have a unique index value
+                               in `index' field. If more than one match elements are
+                               configured, they are evaluated against packets in ascending
+                               order of `index' value in each match element. Packets which
+                               matches the condition described by at least one match element
+                               are selected by this flow condition.
+                
+                               Every packet is selected if this element is omitted or empty.
+            </li>
+            <li>
+                key definition: index
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-match-config">vtn-flow-match-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-ether-match">
+                container: vtn-ether-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against Ethernet header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ether-match-fields">vtn-ether-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ether-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ethernet type.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)ether-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID in VLAN tag.
+                               Zero means untagged ethernet frame.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority in VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-pcp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-inet-match">
+                container: vtn-inet-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against IP header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-inet-match-fields">vtn-inet-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the source IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the destination IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: protocol
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP protocol number.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP DSCP field value.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)dscp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match">
+                choice: vtn-layer4-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match layer 4 protocol header.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-icmp-match">
+                case: vtn-icmp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-icmp-match-fields">vtn-icmp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-tcp-match">
+                case: vtn-tcp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-tcp-match-fields">vtn-tcp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-tcp-match/tcp-source-range">
+                container: tcp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-tcp-match/tcp-destination-range">
+                container: tcp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-udp-match">
+                case: vtn-udp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-udp-match-fields">vtn-udp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-udp-match/udp-source-range">
+                container: udp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-cond-config/vtn-flow-match/vtn-layer4-match/vtn-udp-match/udp-destination-range">
+                container: udp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-icmp-match-fields">vtn-icmp-match-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the ICMP header fields to match against packets.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: icmp-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-udp-match-fields">vtn-udp-match-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the range of UDP port numbers.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-udp-match-fields/udp-source-range">
+                container: udp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-udp-match-fields/udp-destination-range">
+                container: udp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-match-config">vtn-flow-match-config</h3>
+        <ul>
+            <li>
+                Description: Describes the configuration for a VTN flow match in a VTN flow
+                           condition.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-ether-match">
+                container: vtn-ether-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against Ethernet header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ether-match-fields">vtn-ether-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ether-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ethernet type.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)ether-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID in VLAN tag.
+                               Zero means untagged ethernet frame.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority in VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-pcp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-inet-match">
+                container: vtn-inet-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against IP header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-inet-match-fields">vtn-inet-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the source IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the destination IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: protocol
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP protocol number.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP DSCP field value.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)dscp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match">
+                choice: vtn-layer4-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match layer 4 protocol header.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-icmp-match">
+                case: vtn-icmp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-icmp-match-fields">vtn-icmp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-tcp-match">
+                case: vtn-tcp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-tcp-match-fields">vtn-tcp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-tcp-match/tcp-source-range">
+                container: tcp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-tcp-match/tcp-destination-range">
+                container: tcp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-udp-match">
+                case: vtn-udp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-udp-match-fields">vtn-udp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-udp-match/udp-source-range">
+                container: udp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-match-config/vtn-layer4-match/vtn-udp-match/udp-destination-range">
+                container: udp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-match-fields">vtn-match-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the configuration for a VTN flow match that specifies
+                           the condition to match against packets.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-ether-match">
+                container: vtn-ether-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against Ethernet header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ether-match-fields">vtn-ether-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ether-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ethernet type.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)ether-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID in VLAN tag.
+                               Zero means untagged ethernet frame.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority in VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-pcp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-inet-match">
+                container: vtn-inet-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against IP header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-inet-match-fields">vtn-inet-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the source IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the destination IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: protocol
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP protocol number.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP DSCP field value.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)dscp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match">
+                choice: vtn-layer4-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match layer 4 protocol header.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-icmp-match">
+                case: vtn-icmp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-icmp-match-fields">vtn-icmp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-tcp-match">
+                case: vtn-tcp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-tcp-match-fields">vtn-tcp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-tcp-match/tcp-source-range">
+                container: tcp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-tcp-match/tcp-destination-range">
+                container: tcp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-udp-match">
+                case: vtn-udp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-udp-match-fields">vtn-udp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-udp-match/udp-source-range">
+                container: udp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-match-fields/vtn-layer4-match/vtn-udp-match/udp-destination-range">
+                container: udp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-port-range">vtn-port-range</h3>
+        <ul>
+            <li>
+                Description: Describes the range of IP transport layer protocol such as TCP.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-match-result">vtn-flow-match-result</h3>
+        <ul>
+            <li>
+                Description: Describes a pair of VTN flow match index and `vtn-update-type'.
+                
+                           This grouping is used as output of RPC that modifies the VTN flow
+                           match configuration in a flow condition.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that specifies the flow match in the flow
+                               condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-tcp-match-fields">vtn-tcp-match-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the range of TCP port numbers.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-tcp-match-fields/tcp-source-range">
+                container: tcp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-tcp-match-fields/tcp-destination-range">
+                container: tcp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-flow-condition</strong>
+    <ul>
+    <li>
+        <a href="#vtn-flow-conditions"><strong>vtn-flow-conditions</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#vtn-flow-conditions/vtn-flow-condition"><strong>vtn-flow-condition</strong> [name]
+            </a>
+            <ul>
+            <li>
+                <i>name</i>(U)
+            </li>
+            <li>
+                <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match"><strong><i>vtn-flow-match</i></strong> [index]
+                (U)
+                </a>
+                <ul>
+                <li>
+                    <i>index</i>(U)
+                </li>
+                <li>
+                    <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-ether-match"><strong><i>vtn-ether-match</i></strong>(U)
+                    </a>
+                    <ul>
+                    <li>
+                        <i>source-address</i>(U)
+                    </li>
+                    <li>
+                        <i>destination-address</i>(U)
+                    </li>
+                    <li>
+                        <i>ether-type</i>(U)
+                    </li>
+                    <li>
+                        <i>vlan-id</i>(U)
+                    </li>
+                    <li>
+                        <i>vlan-pcp</i>(U)
+                    </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-inet-match"><strong><i>vtn-inet-match</i></strong>(U)
+                    </a>
+                    <ul>
+                    <li>
+                        <i>source-network</i>(U)
+                    </li>
+                    <li>
+                        <i>destination-network</i>(U)
+                    </li>
+                    <li>
+                        <i>protocol</i>(U)
+                    </li>
+                    <li>
+                        <i>dscp</i>(U)
+                    </li>
+                    </ul>
+                </li>
+                <li>
+                    <i>vtn-layer4-match</i>(U)
+                     (choice)
+                    <ul>
+                    <li>
+                    <i>vtn-icmp-match</i>(U)
+                    <ul>
+                    <li>
+                        <i>icmp-type</i>(U)
+                    </li>
+                    <li>
+                        <i>icmp-code</i>(U)
+                    </li>
+                    </ul>
+                    </li>
+                    <li>
+                    <i>vtn-tcp-match</i>(U)
+                    <ul>
+                    <li>
+                        <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-source-range"><strong><i>tcp-source-range</i></strong>(U)
+                        </a>
+                        <ul>
+                        <li>
+                            <i>port-from</i>(U)
+                        </li>
+                        <li>
+                            <i>port-to</i>(U)
+                        </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-destination-range"><strong><i>tcp-destination-range</i></strong>(U)
+                        </a>
+                        <ul>
+                        <li>
+                            <i>port-from</i>(U)
+                        </li>
+                        <li>
+                            <i>port-to</i>(U)
+                        </li>
+                        </ul>
+                    </li>
+                    </ul>
+                    </li>
+                    <li>
+                    <i>vtn-udp-match</i>(U)
+                    <ul>
+                    <li>
+                        <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-source-range"><strong><i>udp-source-range</i></strong>(U)
+                        </a>
+                        <ul>
+                        <li>
+                            <i>port-from</i>(U)
+                        </li>
+                        <li>
+                            <i>port-to</i>(U)
+                        </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-destination-range"><strong><i>udp-destination-range</i></strong>(U)
+                        </a>
+                        <ul>
+                        <li>
+                            <i>port-from</i>(U)
+                        </li>
+                        <li>
+                            <i>port-to</i>(U)
+                        </li>
+                        </ul>
+                    </li>
+                    </ul>
+                    </li>
+                    </ul>
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-flow-conditions">vtn-flow-conditions</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-flow-conditions">
+        vtn-flow-conditions
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition">vtn-flow-condition</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-conditions xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- vtn-flow-condition -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-flow-condition xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/vtn-flow-condition&gt;
+        
+        &lt;/vtn-flow-conditions&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition">
+        vtn-flow-conditions/vtn-flow-condition
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match">vtn-flow-match</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-condition xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- name -->
+            &lt;name xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/name&gt;
+        <!-- vtn-flow-match -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-flow-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/vtn-flow-match&gt;
+        
+        &lt;/vtn-flow-condition&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>index</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-ether-match">vtn-ether-match</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-inet-match">vtn-inet-match</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- index -->
+            &lt;index xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/index&gt;
+        <!-- vtn-ether-match -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-ether-match">definition</a>
+             for child nodes.  --&gt
+            &lt;vtn-ether-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/vtn-ether-match&gt;
+        <!-- vtn-inet-match -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-inet-match">definition</a>
+             for child nodes.  --&gt
+            &lt;vtn-inet-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/vtn-inet-match&gt;
+        <!-- vtn-layer4-match -->
+            <!-- noop -->
+        
+        &lt;/vtn-flow-match&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-ether-match">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-ether-match
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}/vtn-ether-match</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>source-address</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>destination-address</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>ether-type</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>vlan-id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>vlan-pcp</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-ether-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- source-address -->
+            &lt;source-address xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/source-address&gt;
+        <!-- destination-address -->
+            &lt;destination-address xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/destination-address&gt;
+        <!-- ether-type -->
+            &lt;ether-type xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/ether-type&gt;
+        <!-- vlan-id -->
+            &lt;vlan-id xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/vlan-id&gt;
+        <!-- vlan-pcp -->
+            &lt;vlan-pcp xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/vlan-pcp&gt;
+        
+        &lt;/vtn-ether-match&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-inet-match">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/vtn-inet-match
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}/vtn-inet-match</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>source-network</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>destination-network</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>protocol</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>dscp</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-inet-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- source-network -->
+            &lt;source-network xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/source-network&gt;
+        <!-- destination-network -->
+            &lt;destination-network xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/destination-network&gt;
+        <!-- protocol -->
+            &lt;protocol xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/protocol&gt;
+        <!-- dscp -->
+            &lt;dscp xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/dscp&gt;
+        
+        &lt;/vtn-inet-match&gt;
+    </pre>
+    </h3>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- vtn-icmp-match -->
+            <!-- noop -->
+        <!-- vtn-tcp-match -->
+            <!-- noop -->
+        <!-- vtn-udp-match -->
+            <!-- noop -->
+        
+        &lt;/vtn-flow-match&gt;
+    </pre>
+    </h3>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>icmp-type</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>icmp-code</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- icmp-type -->
+            &lt;icmp-type xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/icmp-type&gt;
+        <!-- icmp-code -->
+            &lt;icmp-code xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/icmp-code&gt;
+        
+        &lt;/vtn-flow-match&gt;
+    </pre>
+    </h3>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-source-range">tcp-source-range</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-destination-range">tcp-destination-range</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- tcp-source-range -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-source-range">definition</a>
+             for child nodes.  --&gt
+            &lt;tcp-source-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/tcp-source-range&gt;
+        <!-- tcp-destination-range -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-destination-range">definition</a>
+             for child nodes.  --&gt
+            &lt;tcp-destination-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/tcp-destination-range&gt;
+        
+        &lt;/vtn-flow-match&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-source-range">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-source-range
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}/tcp-source-range</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>port-from</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-to</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;tcp-source-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- port-from -->
+            &lt;port-from xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-from&gt;
+        <!-- port-to -->
+            &lt;port-to xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-to&gt;
+        
+        &lt;/tcp-source-range&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-destination-range">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/tcp-destination-range
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}/tcp-destination-range</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>port-from</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-to</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;tcp-destination-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- port-from -->
+            &lt;port-from xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-from&gt;
+        <!-- port-to -->
+            &lt;port-to xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-to&gt;
+        
+        &lt;/tcp-destination-range&gt;
+    </pre>
+    </h3>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-source-range">udp-source-range</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-destination-range">udp-destination-range</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-flow-match xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- udp-source-range -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-source-range">definition</a>
+             for child nodes.  --&gt
+            &lt;udp-source-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/udp-source-range&gt;
+        <!-- udp-destination-range -->
+            &lt!-- See <a href="#vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-destination-range">definition</a>
+             for child nodes.  --&gt
+            &lt;udp-destination-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/udp-destination-range&gt;
+        
+        &lt;/vtn-flow-match&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-source-range">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-source-range
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}/udp-source-range</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>port-from</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-to</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;udp-source-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- port-from -->
+            &lt;port-from xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-from&gt;
+        <!-- port-to -->
+            &lt;port-to xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-to&gt;
+        
+        &lt;/udp-source-range&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-destination-range">
+        vtn-flow-conditions/vtn-flow-condition/vtn-flow-match/udp-destination-range
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-flow-condition:vtn-flow-conditions/vtn-flow-condition/{name}/vtn-flow-match/{index}/udp-destination-range</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>port-from</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-to</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;udp-destination-range xmlns="urn:opendaylight:vtn:flow:cond"&gt;<!-- Child nodes -->
+        <!-- port-from -->
+            &lt;port-from xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-from&gt;
+        <!-- port-to -->
+            &lt;port-to xmlns="urn:opendaylight:vtn:flow:cond"&gt;...&lt;/port-to&gt;
+        
+        &lt;/udp-destination-range&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="set-flow-condition-match">set-flow-condition-match
+    </h3>
+        <ul>
+            <li>
+                Description: Configure a flow match condition into the flow condition specified
+                           by the flow condition name and match index.
+                
+                           This operation takes a list of `vtn-flow-match-config', and
+                           put all configurations in that list into the specified flow
+                           condition.
+                
+                           Match indices specified in the RPC input will be copied to the
+                           RPC output, and `status' field in `vtn-flow-match-result' describes
+                           the result of the operation.
+                
+                           `CREATED` indicates that the flow match configuration specified by
+                           the index value has been newly created.
+                
+                           `CHANGED' indicates that the flow match configuration specified by
+                           the index value has been successfully changed.
+                
+                           Null indicates that the flow match configuration specified by
+                           the index value was not changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the specified flow condition is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the target flow condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list">
+                list: flow-match-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of `vtn-flow-match-config' to be applied to the
+                                   flow condition specified by `name' field. Note that a
+                                   duplicate match index in this list will cause a
+                                   `BADREQUEST' error.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-match-config">vtn-flow-match-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-ether-match">
+                container: vtn-ether-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against Ethernet header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ether-match-fields">vtn-ether-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ether-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ethernet type.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)ether-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID in VLAN tag.
+                               Zero means untagged ethernet frame.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority in VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-pcp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-inet-match">
+                container: vtn-inet-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against IP header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-inet-match-fields">vtn-inet-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the source IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the destination IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: protocol
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP protocol number.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP DSCP field value.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)dscp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match">
+                choice: vtn-layer4-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match layer 4 protocol header.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-icmp-match">
+                case: vtn-icmp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-icmp-match-fields">vtn-icmp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-tcp-match">
+                case: vtn-tcp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-tcp-match-fields">vtn-tcp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-tcp-match/tcp-source-range">
+                container: tcp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-tcp-match/tcp-destination-range">
+                container: tcp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-udp-match">
+                case: vtn-udp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-udp-match-fields">vtn-udp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-udp-match/udp-source-range">
+                container: udp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/input/flow-match-list/vtn-layer4-match/vtn-udp-match/udp-destination-range">
+                container: udp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition-match/output/set-match-result">
+                list: set-match-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of match indices passed to the RPC input
+                                   and results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-match-result">vtn-flow-match-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that specifies the flow match in the flow
+                               condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="set-flow-condition">set-flow-condition
+    </h3>
+        <ul>
+            <li>
+                Description: Create or modify the flow condition.
+                
+                           If the flow condition specified by the name does not exist, a new
+                           flow condition will be associated with the specified name.
+                           If the flow condition specifie dby the name already exists,
+                           it will be modified as specified the RPC input.
+                
+                           `status' in RPC output descripts the result of the operation.
+                
+                           `CREATED' indicates that the specified flow condition has been
+                           newly created.
+                
+                           `CHANGED' indicates that existing flow condition configuraiton has
+                           been successfully changed.
+                
+                           Null indicates that existing flow condition configuration has not
+                           been changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if true is set to `present' field in the RPC
+                           input and the target flow condition is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-cond-config">vtn-flow-cond-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match">
+                list: vtn-flow-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of conditions to match against packets.
+                               Each element in this list needs to have a unique index value
+                               in `index' field. If more than one match elements are
+                               configured, they are evaluated against packets in ascending
+                               order of `index' value in each match element. Packets which
+                               matches the condition described by at least one match element
+                               are selected by this flow condition.
+                
+                               Every packet is selected if this element is omitted or empty.
+            </li>
+            <li>
+                key definition: index
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-match-config">vtn-flow-match-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-ether-match">
+                container: vtn-ether-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against Ethernet header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-ether-match-fields">vtn-ether-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The source MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The destination MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ether-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ethernet type.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)ether-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID in VLAN tag.
+                               Zero means untagged ethernet frame.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority in VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-pcp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-inet-match">
+                container: vtn-inet-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match against IP header.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-inet-match-fields">vtn-inet-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: source-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the source IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: destination-network
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP network to match the destination IP address.
+                               Currently, it is possible to configure only an IPv4 address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ip-prefix
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: protocol
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP protocol number.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The IP DSCP field value.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)dscp
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match">
+                choice: vtn-layer4-match
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The flow condition to match layer 4 protocol header.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-icmp-match">
+                case: vtn-icmp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-icmp-match-fields">vtn-icmp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: icmp-code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint8
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-tcp-match">
+                case: vtn-tcp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-tcp-match-fields">vtn-tcp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-tcp-match/tcp-source-range">
+                container: tcp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-tcp-match/tcp-destination-range">
+                container: tcp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of TCP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-udp-match">
+                case: vtn-udp-match
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-udp-match-fields">vtn-udp-match-fields</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-udp-match/udp-source-range">
+                container: udp-source-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP source port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/input/vtn-flow-match/vtn-layer4-match/vtn-udp-match/udp-destination-range">
+                container: udp-destination-range
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The range of UDP destination port number.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-range">vtn-port-range</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-from
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The minimum value (inclusive) in the range of port numbers
+                               to match against packets.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-to
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The maximum value (inclusive) in the range of port numbers
+                               to match against packets.
+                               The value must be greater than or equal to the value specified
+                               to `port-from' field. If this field is omitted, it will be
+                               treated as the port number specified to `port-from' field is
+                               specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)port-number
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: operation
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes how to update the specified flow condition if it
+                                   already exists.
+                
+                                   If `SET' is specified, the given flow condition
+                                   configuration will be applied as specified. In other words,
+                                   existing flow condition configuration will be removed, and
+                                   the given flow condition will be created.
+                
+                                   If `ADD' is specified, the given flow condition
+                                   configuration will be merged with existing configuration.
+                                   The target flow condition will be created if it is not
+                                   present.
+                
+                                   Null will be treated as if `ADD' is specified.
+                
+                                   Note that the operation will fail if true is set to
+                                   `present' field and the target flow condition is not
+                                   present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-operation-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: present
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: If true is set, the opration will fail unless the target
+                                   flow condition is present.
+                                  Null will be treated as if false is specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-condition/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="remove-flow-condition-match">remove-flow-condition-match
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the flow match condition specified by the flow condition
+                           name and match index.
+                
+                           Values passed to `match-index' list will be copied to the RPC
+                           output, and `status' field in `vtn-flow-match-result' describes
+                           the result of the operation.
+                
+                           `REMOVED' indicates that the flow match associated with the match
+                           index has been successfully removed.
+                
+                           Null indicates that the flow match is not associated with the
+                           match index in the specified flow condition.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the specified flow condition is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-flow-condition-match/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition to be removed.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: match-index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of match indices to be removed from the flow
+                                   condition specified by the `name' field.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: int32
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-flow-condition-match/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="remove-flow-condition-match/output/remove-match-result">
+                list: remove-match-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of match indices passed to the RPC input
+                                   and results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-match-result">vtn-flow-match-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that specifies the flow match in the flow
+                               condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="clear-flow-condition">clear-flow-condition
+    </h3>
+        <ul>
+            <li>
+                Description: Remove all the flow conditions.
+                
+                           `status' in RPC output descripts the result of the operation.
+                
+                           `REMOVED' indicates that at least one flow condition has been
+                           removed.
+                
+                           Null indicates that no flow condition is present.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="clear-flow-condition/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="clear-flow-condition/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="remove-flow-condition">remove-flow-condition
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the flow condition specified by the name.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the specified flow condition is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-flow-condition/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition to be removed.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-flow-condition/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

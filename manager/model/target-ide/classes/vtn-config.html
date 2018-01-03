@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-config</title>
+  </head>
+  <body>
+    <h1>vtn-config</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vconf</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:config</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-02-09</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes runtime configuration for the VTN Manager.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        yang:ietf-yang-types 2013-07-15;
+    </td>    </tr>
+    </table>
+    
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-config"><strong>vtn-config</strong></a>
+            </td>
+            <td>
+            The global configuration of the VTN Manager.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-config</strong>
+    <ul>
+    <li>
+        <a href="#vtn-config"><strong>vtn-config</strong>
+        </a>
+        <ul>
+        <li>
+            topology-wait
+        </li>
+        <li>
+            l2-flow-priority
+        </li>
+        <li>
+            flow-mod-timeout
+        </li>
+        <li>
+            bulk-flow-mod-timeout
+        </li>
+        <li>
+            init-timeout
+        </li>
+        <li>
+            max-redirections
+        </li>
+        <li>
+            controller-mac-address
+        </li>
+        <li>
+            host-tracking
+        </li>
+        <li>
+            init-state
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-config">vtn-config</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-config">
+        vtn-config
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-config:vtn-config</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>topology-wait</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>l2-flow-priority</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>flow-mod-timeout</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>bulk-flow-mod-timeout</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>init-timeout</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>max-redirections</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>controller-mac-address</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>host-tracking</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>init-state</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-config xmlns="urn:opendaylight:vtn:config"&gt;<!-- Child nodes -->
+        <!-- topology-wait -->
+            &lt;topology-wait xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/topology-wait&gt;
+        <!-- l2-flow-priority -->
+            &lt;l2-flow-priority xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/l2-flow-priority&gt;
+        <!-- flow-mod-timeout -->
+            &lt;flow-mod-timeout xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/flow-mod-timeout&gt;
+        <!-- bulk-flow-mod-timeout -->
+            &lt;bulk-flow-mod-timeout xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/bulk-flow-mod-timeout&gt;
+        <!-- init-timeout -->
+            &lt;init-timeout xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/init-timeout&gt;
+        <!-- max-redirections -->
+            &lt;max-redirections xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/max-redirections&gt;
+        <!-- controller-mac-address -->
+            &lt;controller-mac-address xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/controller-mac-address&gt;
+        <!-- host-tracking -->
+            &lt;host-tracking xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/host-tracking&gt;
+        <!-- init-state -->
+            &lt;init-state xmlns="urn:opendaylight:vtn:config"&gt;...&lt;/init-state&gt;
+        
+        &lt;/vtn-config&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

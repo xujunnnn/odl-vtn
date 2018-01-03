@@ -1,0 +1,680 @@
+#!/bin/bash
+
+#
+# Copyright (c) 2012-2014 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+
+# dbm common script functions
+
+IFS="
+	 "
+PATH=/bin:/usr/bin:/usr/sbin:/sbin
+export PATH
+
+umask 066
+
+# Import common functions.
+. %INST_DATADIR%/vtn_funcs.sh
+if [ $? -ne 0 ]; then
+	# This should never happen.
+	echo "*** ERROR: Failed to import common functions."
+	exit 1
+fi
+
+# readconf()
+#
+#      Read INI style config file.
+#
+# * input
+#      arg1: config file
+#
+# * output
+#      0: Could read config
+#      1: Couldn't read config
+#
+readconf()
+{
+	local values=""
+
+	[ -r $1 ] || return 1
+	values=$(grep '=' $1)
+	eval ${values// /}
+	return 0
+}
+
+VARRUNDIR=%INST_LOCALSTATEDIR%/run
+VARDBDIR=%INST_UNCWORKDIR%/db
+DBMCONFDIR=%INST_SYSCONFDIR%/dbm
+DBMLOGDIR=%INST_UNCWORKDIR%/dbm
+
+DBMUPDATECONFDIR=$VARDBDIR/etc
+DBMTMPDIR=$VARRUNDIR/dbm
+
+DBMCONF=$DBMCONFDIR/unc_db_env.conf
+DBMPATHCONF=$DBMCONFDIR/pathinfo/unc_db_path_info.conf
+DBMPGSQLCONF=$DBMUPDATECONFDIR/pgsql.conf
+
+VTN_STOP=%INST_BINDIR%/vtn_stop
+
+# Read $DBMPGSQLCONF first so that PostgreSQL path can be overwritten by
+# unc_db_env.conf.
+readconf $DBMPGSQLCONF
+readconf $DBMCONF
+readconf $DBMPATHCONF
+
+PIDFILE=$PGDATA/postmaster.pid
+POSTFILE=$PGDATA/postgresql.conf
+SINGLEPOSTFILE=$DBMCONFDIR/postgresql.conf.single
+HBACONFFILE=$DBMCONFDIR/pg_hba.conf
+HBADATAFILE=$PGDATA/pg_hba.conf
+POSTLOGFILE=$PGDATA/postmaster.log
+UNCDATASQLDIR=%INST_SQLDIR%
+DBLOGFILE=$DBMLOGDIR/unc_db_script.log
+
+PGHOST=$DBMTMPDIR
+
+PGCTL_START_WAIT=60
+PGCTL_STOP_WAIT=180
+
+clm_date() { date +'%y-%m-%d %H:%M:%S.%N'; }
+
+# expand_shm_param()
+#
+#      Expand SysV IPC shared memory parameter if needed.
+#      (Linux specific)
+#
+# * input
+#      arg1:  Path to proc filesystem file
+#      arg2:  Value to be set
+#
+# * output
+#      Nothing
+#
+expand_shm_param()
+{
+	local path=$1
+	local value=$2
+
+	local cur=`cat $path`
+	if [ -n "$cur" -a "$cur" -lt "$value" ]; then
+		echo "$value" > $path
+	fi
+}
+
+# check_shm_param()
+#
+#       Ensure that SysV IPC shared memory parameter is sufficient.
+#       (Linux specific)
+#
+#       If not, a command to be executed as root is appended to
+#       SHM_PARAM_ERROR variable.
+#
+# * input
+#      arg1:  Path to proc filesystem file
+#      arg2:  Expected value
+#
+# * output
+#      0 is returned on success. 1 is returned on error.
+#
+check_shm_param()
+{
+	local path=$1
+	local value=$2
+
+	local cur=`cat $path`
+	if [ -n "$cur" -a "$cur" -lt "$value" ]; then
+		SHM_PARAM_ERROR="echo $value > $path"
+		return 1
+	fi
+
+	return 0
+}
+
+# log_output()
+#
+#	Message is output in logfile for DB.
+#
+# * input
+#	   arg1: PID
+#	   arg2: log level(INFO or ERROR or WARNING)
+#	   arg3: command name
+#	   arg4: message
+#	   arg5: log file
+#
+# * output
+#	   Nothing
+#
+log_output()
+{
+	local pid=$1
+	local log_level=$2
+	local cmd_name=$3
+	local message=$4
+	local logfile=$5
+
+	[ -z "$logfile" ] && return
+	echo "$(clm_date): $cmd_name[$pid]: $log_level : $message" >> $logfile
+}
+
+# log_fatal()
+#
+#      Record error log message and exit with status 1.
+#
+# * input
+#      arg1: message
+#      arg2: log file
+#
+# * output
+#      Never returns.
+#
+log_fatal()
+{
+	local msg=$1
+	local logfile=$2
+
+	log_output $$ ERROR $0 "$msg" "$logfile"
+	echo "*** ERROR: $msg"
+	exit 1
+}
+
+# runas_suuser()
+#      Run the specified command as PostgreSQL superuser.
+#
+# * input
+#      arg1:  Command and arguments
+#
+# * output
+#      Exit status of the command is returned.
+#
+runas_suuser()
+{
+	local cmd=$1
+
+	if [ $VTN_RUN_UID -eq 0 ]; then
+		su -m $SUUSER -c "$cmd"
+	else
+		eval "$cmd"
+	fi
+
+	return $?
+}
+
+# db_access_check()
+#
+#	Check DB access
+#
+# * output
+#	   0: already DB started
+#	   1: DB stopped
+#
+db_access_check()
+{
+	runas_suuser "cd /; $PGINST/bin/psql -c \"select 1;\"" > /dev/null
+	[ $? -ne 0 ] && return 1
+	return 0
+}
+
+# db_start()
+#
+#	Start DB
+#
+# * output
+#	   0: Success
+#	   1: Already Started
+#	   2: Failure
+#
+db_start()
+{
+	db_access_check
+	[ $? -eq 0 ] && return 1
+	rm -f $POSTLOGFILE
+	rm -f $PIDFILE
+
+	local sockfile="$PGHOST.s.PGSQL.$PGPORT"
+	rm -f $sockfile
+	rm -f "${sockfile}.lock"
+
+	if [ $VTN_RUN_UID -eq 0 ]; then
+		# Expand shared memory parameter if needed.
+		expand_shm_param /proc/sys/kernel/shmmax $SHMMAX
+		expand_shm_param /proc/sys/kernel/shmall $SHMALL
+	else
+		local cmd_shmmax cmd_shmall
+		check_shm_param /proc/sys/kernel/shmmax $SHMMAX
+		[ $? -ne 0 ] && cmd_shmmax=$SHM_PARAM_ERROR
+		check_shm_param /proc/sys/kernel/shmall $SHMALL
+		[ $? -ne 0 ] && cmd_shmall=$SHM_PARAM_ERROR
+		if [ -n "$cmd_shmmax" -o -n "$cmd_shmall" ]; then
+			cat <<EOF
+*** ERROR: SysV shared memory parameter needs to be expanded.
+***     Execute following commands as "root" user.
+***
+EOF
+			local cmd
+			for cmd in "$cmd_shmmax" "$cmd_shmall"; do
+				[ -n "$cmd" ] && cat <<EOF
+***         $cmd
+EOF
+			done
+			cat <<EOF
+***
+EOF
+			return 2
+		fi
+	fi
+
+	runas_suuser \
+		"$PGINST/bin/pg_ctl start -D $PGDATA -w -t $PGCTL_START_WAIT" \
+		 >&2
+	[ $? -ne 0 ] && return 2
+	return 0
+}
+
+# db_stop()
+#
+#	Stop DB
+#
+# * output
+#	   0: Success
+#	   1: Failure
+#
+db_stop()
+{
+	db_stop_exec "-mf" && return 0
+	db_stop_exec "-mi" && return 0
+	kill_pg_process && return 0
+	return 1
+}
+
+# db_stop_exec()
+#
+#	DB stop processing
+#
+# * input
+#	   arg1: stop mode
+#
+# * output
+#	   0: Success
+#	   1: Failure
+#
+db_stop_exec()
+{
+	local stop_mode="$1"
+
+	runas_suuser \
+		"$PGINST/bin/pg_ctl stop -D $PGDATA $stop_mode \
+		-t $PGCTL_STOP_WAIT" > /dev/null
+	[ $? -ne 0 ] && return 1
+	return 0
+}
+
+# kill_pg_process()
+#
+#	When processes of PostgreSQL existed, there are killed.
+#
+# * input
+#     Nothing
+#
+# * output
+#	   0: not exists
+#	   1: Processes of PostgreSQL were killed
+#	      or An error occurred in ssh
+#
+kill_pg_process()
+{
+	local pg_ppid=""
+	local pg_pids=""
+
+	pg_ppid=`pgrep -f "$PGINST/bin/postgres -D $PGDATA"`
+	[ $? -eq 0 ] &&
+	{
+		pg_pids=`pgrep -P $pg_ppid`
+		kill -9 $pg_ppid
+		for pg_pid in $pg_pids; do
+			kill -9 $pg_pid 2> /dev/null
+		done
+		return 1
+	}
+	return 0
+}
+
+# create_copyright_file()
+#
+#      Create a new file with copyright notice.
+#
+# * input
+#      arg1: Path to the file to be created.
+#      arg2: File mode. (optional)
+#      arg3: Owner and group to be passed to chown command. (optional)
+#
+#      If LOGFILE is defined, an error log is recorded into the file specified
+#      by LOGFILE on error.
+#
+# * output
+#      0: Success
+#      1: Failure
+#
+create_copyright_file()
+{
+	local path="$1"
+	local mode="$2"
+	local owner="$3"
+
+	local year=`date '+%Y'`
+	cat > $path <<EOF
+#
+# Copyright (c) 2012-$year NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+
+#
+# DO NOT EDIT THIS FILE
+#
+# This file is automatically generated by db_setup.
+#
+
+EOF
+
+	if [ $? -ne 0 ]; then
+		log_output $$ ERROR $0 "Failed to create file: $path" \
+			   "$LOGFILE"
+		return 1
+	fi
+
+	if [ -n "$mode" ]; then
+		chmod $mode $path
+		if [ $? -ne 0 ]; then
+			log_output $$ ERROR $0 \
+				   "Failed to change file mode: $path" \
+				   "$LOGFILE"
+			return 1
+		fi
+	fi
+
+	if [ $VTN_RUN_UID -eq 0 -a -n "$owner" ]; then
+		chown $owner $path
+		if [ $? -ne 0 ]; then
+			log_output $$ ERROR $0 "Failed to change owner: $path" \
+				   "$LOGFILE"
+			return 1
+		fi
+	fi
+
+	return 0
+}
+
+# copy_postgresql_file()
+#
+#       Copy file only for PostgreSQL.
+#
+# * input
+#      arg1: Source file path
+#      arg2: Destination file path.
+#
+# * output
+#      0: Success
+#      1: Failure
+#
+copy_postgresql_file()
+{
+	local src="$1"
+	local dst="$2"
+
+	cp $src $dst || return 1
+	if [ $VTN_RUN_UID -eq 0 ]; then
+		chown $SUUSER:$SUUSER $dst || return 1
+	fi
+
+	chmod 0600 $dst || return 1
+
+	return 0
+}
+
+# copy_postgresql_conf()
+#
+#	copy postgresql.conf
+#
+# * input
+#      arg1: PostgreSQL major version number
+#      arg2: PostgreSQL minor version number
+#
+# * output
+#      0: Success
+#      1: Failure
+#
+copy_postgresql_conf()
+{
+	local major=$1
+	local minor=$2
+
+	# Determine parameter that specifies UNIX domain socket path.
+	local uds
+	if [ "$major" -gt 9 -o \( "$major" -eq 9 -a "$minor" -ge 3 \) ]; then
+		uds="unix_socket_directories"
+	else
+		uds="unix_socket_directory"
+	fi
+
+	# Update postgresql.conf.
+	local tmp="${POSTFILE}_tmp.$$"
+	sed -e "s,%unix_socket_directory%,$uds," $SINGLEPOSTFILE > $tmp
+	if [ $? -ne 0 ]; then
+		rm -f $tmp
+		return 1
+	fi
+
+	# Install postgresql.conf.
+	copy_postgresql_file $tmp $POSTFILE
+	local status=$?
+	rm -f $tmp
+
+	return $status
+}
+
+# create_setting_file()
+#
+#	create setting file.
+#
+# * input
+#	   Nothing
+#
+# * output
+#	   0: Success
+#	   1: Failure
+#
+create_setting_file()
+{
+	# Copy pg_hba.conf.
+	copy_postgresql_file $HBACONFFILE $HBADATAFILE
+
+	# Setting of odbc.ini
+	rm -f $ODBCINIFILE || return 1
+
+	create_copyright_file $ODBCINIFILE 0600 || return 1
+	odbc_common_setting UNC_DB_DSN $PGHOST || return 1
+	odbc_common_setting UNC_DB_LC1_DSN $PGHOST || return 1
+
+	return 0
+}
+
+# odbc_common_setting()
+#
+#	odbc common setting.
+#
+# * input
+#	   arg1: DSN
+#	   arg2: Server IP address or UNIX domain socket directory
+#
+# * output
+#	   0: Success
+#	   1: Failure
+#
+odbc_common_setting()
+{
+	{
+		echo "[${1}]"
+		echo "Driver     = UNC_DB_DRIVER"
+		echo "Servername = $2"
+		echo "Database   = $PGDATABASE"
+		echo "UserName   = $UNC_DB_USER"
+		echo "Password   = $UNC_DB_PASSWORD"
+		echo "Port       = $PGPORT"
+		echo ""
+	} >> $ODBCINIFILE
+	[ $? -ne 0 ] && return 1
+
+	return 0
+}
+
+# pgpass_setting()
+#
+#	.pgpass setting.
+#
+# * input
+#	   Nothing
+#
+# * output
+#	   0: Success
+#	   1: Failure
+#
+pgpass_setting()
+{
+	rm -f $PGPASSFILE
+	create_copyright_file $PGPASSFILE || return 1
+
+	cat >> $PGPASSFILE << EOF
+localhost:$PGPORT:*:$PGUSER:$PGPASSWORD
+localhost:$PGPORT:$PGDATABASE:$UNC_DB_USER:$UNC_DB_PASSWORD
+EOF
+	[ $? -ne 0 ] && return 1
+	if [ $VTN_RUN_UID -eq 0 ]; then
+		chown $SUUSER:$SUUSER $PGPASSFILE || return 1
+	fi
+	chmod 0600 $PGPASSFILE || return 1
+
+	return 0
+}
+
+# export_pg_env()
+#
+#	An export does an environment variable of PostgreSQL.
+#
+# * input
+#	   Nothing
+#
+# * output
+#	   Nothing
+#
+export_pg_env()
+{
+	export PGDATA
+	export PGHOST
+	export PGPORT
+	export PGUSER
+	export PGDATABASE
+	export PGCONNECT_TIMEOUT
+	export PGPASSFILE
+}
+
+# error_output()
+#
+#   error is output in log.
+#
+# * input
+#     arg1: DB operation
+#     arg2: log file path
+#     arg3: temporary log file path
+#     arg4: log level(It's possible to omit.)
+#
+# * output
+#     Nothing
+#
+error_output()
+{
+	local error_flg=1
+	local error_message=""
+	local log_level="$4"
+	log_level=${log_level:=ERROR}
+	case "$1" in
+		"")
+			error_flg=0;;
+		"initdb")
+			error_message="Failed in initialization of DB.";;
+		"dbstart")
+			error_message="Failed in start of DB node.";;
+		"alterpass")
+			error_message="Failed in password change in DB user.";;
+		"createuser")
+			error_message="Failed in making of DB user.";;
+		"createdb")
+			error_message="Failed in making of DB.";;
+		"createtable")
+			error_message="Failed in making of DB table.";;
+		"dbstop")
+			error_message="Failed in stop of DB node.";;
+		"copy")
+			error_message="Failed in data copy.";;
+		"odbc")
+			error_message="Failed in ODBC setting.";;
+		"alreadydbstart")
+			error_message="DB already started.";;
+		*)
+			error_flg=0
+			;;
+	esac
+	if [ "$error_flg" -eq 1 ]; then
+		log_output $$ $log_level $0 "$error_message" $2
+	fi
+	if [ "$3" != "" -a -r "$3" ]; then
+		while read LINE; do
+			log_output $$ $log_level $0 "$LINE" $2
+		done < "$3"
+		rm -f $3
+	fi
+}
+
+# trap_rm_tmpfile()
+#
+#   tmpfile which isn't eliminated is eliminated.
+#
+# * input
+#     arg1: command name
+#
+# * output
+#     Nothing
+#
+trap_rm_tmpfile()
+{
+	for i in $DBMTMPDIR/${1}_[0-9]*\.log; do
+		if test -r $i && ! lsof $i > /dev/null; then
+			rm -f $i
+		fi
+	done
+}
+
+# interrupt_error()
+#
+#   interrupt error message.
+#
+# * input
+#     arg1: log file path
+#
+# * output
+#     1: error exit
+#
+interrupt_error()
+{
+	log_output $$ ERROR $0 \
+		"The command has interrupted." $1
+	echo "*** ERROR: The command has interrupted."
+	exit 1
+}

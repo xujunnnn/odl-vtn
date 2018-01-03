@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+#
+# Copyright (c) 2013-2016 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opendaylight.vtn</groupId>
+    <artifactId>common</artifactId>
+    <version>0.6.0-Carbon</version>
+    <relativePath>../../common</relativePath>
+  </parent>
+
+  <scm>
+    <connection>scm:git:https://git.opendaylight.org/gerrit/p/vtn.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/vtn.git</developerConnection>
+    <url>https://wiki.opendaylight.org/view/OpenDaylight_Virtual_Tenant_Network_%28VTN%29:Main</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <groupId>org.opendaylight.vtn</groupId>
+  <artifactId>distribution.vtn-coordinator</artifactId>
+  <version>6.4.0-Carbon</version>
+  <!-- <name> formatting is used by autorelease to parse and notify projects on
+       build failure. Please do not modify this unless you have a good reason. -->
+  <name>ODL :: vtn :: ${project.artifactId}</name>
+  <packaging>pom</packaging>
+
+  <profiles>
+    <profile>
+      <id>integrationtests</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <!-- Run all tests. -->
+      <properties>
+        <maven.test.skip>false</maven.test.skip>
+      </properties>
+    </profile>
+  </profiles>
+
+  <properties>
+    <!-- Skip tests entirely unless integrationtests profile is active. -->
+    <skipTests>false</skipTests>
+    <maven.test.skip>true</maven.test.skip>
+
+    <vtn.java.libdir>${basedir}/target/java</vtn.java.libdir>
+    <vtn.gson.version>2.2.2</vtn.gson.version>
+    <vtn.json.version>20090211</vtn.json.version>
+    <vtn.log4j.version>1.2.17</vtn.log4j.version>
+    <vtn.tomcat.version>7.0.73</vtn.tomcat.version>
+    <vtn.commons.codec.version>1.9</vtn.commons.codec.version>
+    <vtn.commons.net.version>3.3</vtn.commons.net.version>
+    <vtn.postgresql.jdbc.version>9.2-1003-jdbc4</vtn.postgresql.jdbc.version>
+
+    <vtn.build.destdir>root</vtn.build.destdir>
+    <vtn.build.prefix>/usr/local/vtn</vtn.build.prefix>
+    <vtn.build.debug>false</vtn.build.debug>
+    <vtn.build.java.home />
+    <vtn.build.ant.home />
+
+    <!-- The number of GNU make jobs -->
+    <vtn.build.jobs>1</vtn.build.jobs>
+
+    <vtn.pkg.classifier>bin</vtn.pkg.classifier>
+    <vtn.pkg.type>tar.bz2</vtn.pkg.type>
+    <vtn.pkg.name>${project.artifactId}-${build.suffix}</vtn.pkg.name>
+    <vtn.pkg.filename>
+      ${vtn.pkg.name}-${vtn.pkg.classifier}.${vtn.pkg.type}
+    </vtn.pkg.filename>
+    <vtn.pkg.path>${basedir}/target/${vtn.pkg.filename}</vtn.pkg.path>
+
+    <vtn.readme.classifier>README</vtn.readme.classifier>
+    <vtn.readme.type>txt</vtn.readme.type>
+    <vtn.readme.filename>
+      ${vtn.pkg.name}-${vtn.readme.classifier}.${vtn.readme.type}
+    </vtn.readme.filename>
+    <vtn.readme.path>${basedir}/target/${vtn.readme.filename}</vtn.readme.path>
+  </properties>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <finalName>${vtn.pkg.name}</finalName>
+    <plugins>
+      <!-- Derive build number from SCM. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <doCheck>false</doCheck>
+          <doUpdate>false</doUpdate>
+          <revisionOnScmFailure>unknown</revisionOnScmFailure>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <!-- Copy java libraries. -->
+          <execution>
+            <id>setup-java-libs</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${vtn.java.libdir}</outputDirectory>
+              <excludeArtifactIds>tomcat-juli</excludeArtifactIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${execplugin.version}</version>
+        <executions>
+          <execution>
+            <!-- Initialize build environment. -->
+            <id>vtn-setup</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>perl</executable>
+              <arguments>
+                <argument>build/setup</argument>
+                <argument>-d</argument>
+                <argument>${basedir}/target</argument>
+                <argument>VTN_VERSION=${project.version}</argument>
+                <argument>VTN_SCM_REVISION=${buildNumber}</argument>
+                <argument>VTN_BUILD_ID=${vtn.build.id}</argument>
+                <argument>VTN_DESTDIR=${vtn.build.destdir}</argument>
+                <argument>VTN_PREFIX=${vtn.build.prefix}</argument>
+                <argument>VTN_JAVA_HOME=${vtn.build.java.home}</argument>
+                <argument>VTN_ANT_HOME=${vtn.build.ant.home}</argument>
+                <argument>VTN_DEBUG=${vtn.build.debug}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Run configure script. -->
+          <execution>
+            <id>vtn-configure</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>-C</argument>
+                <argument>build</argument>
+                <argument>configure</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Compile sources. -->
+          <execution>
+            <id>vtn-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>-C</argument>
+                <argument>build</argument>
+                <argument>-j${vtn.build.jobs}</argument>
+                <argument>install</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Compile test programs. -->
+          <execution>
+            <id>vtn-test-compile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>-C</argument>
+                <argument>build</argument>
+                <argument>-j${vtn.build.jobs}</argument>
+                <argument>test-all</argument>
+                <argument>VTN_SKIP_TEST_BUILD=${maven.test.skip}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Run unit tests. -->
+          <execution>
+            <id>vtn-test-run</id>
+            <phase>test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>-C</argument>
+                <argument>build</argument>
+                <argument>-j${vtn.build.jobs}</argument>
+                <argument>test-test</argument>
+                <argument>VTN_SKIP_TEST_BUILD=${maven.test.skip}</argument>
+                <argument>VTN_SKIP_TEST=${skipTests}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Create binary distribution package. -->
+          <execution>
+            <id>vtn-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>perl</executable>
+              <arguments>
+                <argument>build/pkgmk</argument>
+                <argument>-c</argument>
+                <argument>src/main/txt/README.txt:${vtn.readme.path}</argument>
+                <argument>-o</argument>
+                <argument>${vtn.pkg.path}</argument>
+                <argument>-p</argument>
+                <argument>${vtn.build.prefix}</argument>
+
+                <!-- Replace keywords in README.txt. -->
+                <argument>-R</argument>
+                <argument>%VTN_COORDINATOR_VERSION%</argument>
+                <argument>${project.version}</argument>
+
+                <argument>${basedir}/target/${vtn.build.destdir}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Clean up build environment. -->
+          <execution>
+            <id>vtn-clean</id>
+            <phase>pre-clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <arguments>
+                <argument>-C</argument>
+                <argument>build</argument>
+                <argument>distclean</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+          Add binary distribution package to artifacts.
+          This must be defined after exec-maven-plugin to force execution
+          order.
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>vtn-attach-artifacts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${vtn.pkg.path}</file>
+                  <type>${vtn.pkg.type}</type>
+                  <classifier>${vtn.pkg.classifier}</classifier>
+                </artifact>
+                <artifact>
+                  <file>${vtn.readme.path}</file>
+                  <type>${vtn.readme.type}</type>
+                  <classifier>${vtn.readme.classifier}</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${vtn.gson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>${vtn.json.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>${vtn.commons.codec.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>${vtn.commons.net.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${vtn.postgresql.jdbc.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${vtn.log4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-coyote</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-jasper</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-i18n-es</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-i18n-fr</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-i18n-ja</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.extras</groupId>
+      <artifactId>tomcat-extras-juli</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.extras</groupId>
+      <artifactId>tomcat-extras-juli-adapters</artifactId>
+      <version>${vtn.tomcat.version}</version>
+    </dependency>
+  </dependencies>
+
+</project>

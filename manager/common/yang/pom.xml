@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+#
+# Copyright (c) 2015 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opendaylight.vtn</groupId>
+    <artifactId>manager.common</artifactId>
+    <version>0.6.0-Carbon</version>
+    <relativePath>..</relativePath>
+  </parent>
+
+  <artifactId>manager.common.yang</artifactId>
+  <packaging>pom</packaging>
+
+  <scm>
+    <connection>scm:git:https://git.opendaylight.org/gerrit/p/vtn.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/vtn.git</developerConnection>
+    <url>https://wiki.opendaylight.org/view/OpenDaylight_Virtual_Tenant_Network_%28VTN%29:Main</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <vtn.config.srcdir>src/main/config</vtn.config.srcdir>
+    <vtn.config.builddir>${project.build.directory}/config</vtn.config.builddir>
+    <vtn.config.xml>default-config.xml</vtn.config.xml>
+    <vtn.manager.dir>../..</vtn.manager.dir>
+    <vtn.build.generated-sources>
+      ${project.build.directory}/generated-sources
+    </vtn.build.generated-sources>
+    <salGeneratorPath>${vtn.build.generated-sources}/sal</salGeneratorPath>
+    <jmxGeneratorPath>${vtn.build.generated-sources}/config</jmxGeneratorPath>
+    <docGeneratorPath>${project.build.directory}/site/models</docGeneratorPath>
+  </properties>
+
+  <profiles>
+    <profile>
+      <activation>
+        <file>
+          <exists>${vtn.config.srcdir}/${vtn.config.xml}</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <!--
+              Copy config file into the build directory, or maven meta data
+              will be created under src directory.
+          -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <resources>
+                    <resource>
+                      <directory>${vtn.config.srcdir}</directory>
+                    </resource>
+                  </resources>
+                  <outputDirectory>${vtn.config.builddir}</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-artifacts</id>
+                <goals>
+                  <goal>attach-artifact</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <artifacts>
+                    <artifact>
+                      <file>${vtn.config.builddir}/${vtn.config.xml}</file>
+                      <type>xml</type>
+                      <classifier>config</classifier>
+                    </artifact>
+                  </artifacts>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>add-yang-sources</id>
+              <goals>
+                <goal>add-source</goal>
+              </goals>
+              <phase>generate-sources</phase>
+              <configuration>
+                <sources>
+                  <source>${jmxGeneratorPath}</source>
+                  <source>${salGeneratorPath}</source>
+                </sources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.opendaylight.yangtools</groupId>
+          <artifactId>yang-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate-sources</goal>
+              </goals>
+              <configuration>
+                <codeGenerators>
+                  <generator>
+                    <codeGeneratorClass>
+                      org.opendaylight.controller.config.yangjmxgenerator.plugin.JMXGenerator
+                    </codeGeneratorClass>
+                    <outputBaseDir>${jmxGeneratorPath}</outputBaseDir>
+                    <additionalConfiguration>
+                      <namespaceToPackage1>
+                        urn:opendaylight:params:xml:ns:yang:controller==org.opendaylight.controller.config.yang
+                      </namespaceToPackage1>
+                    </additionalConfiguration>
+                  </generator>
+                  <generator>
+                    <codeGeneratorClass>
+                      org.opendaylight.mdsal.binding.maven.api.gen.plugin.CodeGeneratorImpl
+                    </codeGeneratorClass>
+                    <outputBaseDir>${salGeneratorPath}</outputBaseDir>
+                  </generator>
+                  <generator>
+                    <codeGeneratorClass>
+                      org.opendaylight.mdsal.binding.yang.unified.doc.generator.maven.DocumentationGeneratorImpl
+                    </codeGeneratorClass>
+                    <outputBaseDir>${docGeneratorPath}</outputBaseDir>
+                  </generator>
+                </codeGenerators>
+                <inspectDependencies>true</inspectDependencies>
+              </configuration>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.opendaylight.controller</groupId>
+              <artifactId>yang-jmx-generator-plugin</artifactId>
+              <version>${odl.config.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.opendaylight.mdsal</groupId>
+              <artifactId>maven-sal-api-gen-plugin</artifactId>
+              <version>${odl.mdsal.apigen.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.opendaylight.yangtools</groupId>
+                    <artifactId>yang-maven-plugin</artifactId>
+                    <versionRange>[0.5,)</versionRange>
+                    <goals>
+                      <goal>generate-sources</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- OpenDaylight MD-SAL -->
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>yang-binding</artifactId>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-vlan-map</title>
+  </head>
+  <body>
+    <h1>vtn-vlan-map</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vlanmap</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:mapping:vlan</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-09-07</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the data models for VLAN mapping, which
+                   associates a VLAN with a vBridge in VTN.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        vtype:vtn-types 2015-02-09;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-vlan-map-config"><strong>vtn-vlan-map-config</strong></a>
+            </td>
+            <td>
+            Describes configuration for a VLAN mapping.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-vlan-mappable"><strong>vtn-vlan-mappable</strong></a>
+            </td>
+            <td>
+            Describes the data model which can contain VLAN mapping
+                       configuration.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-vlan-map-info"><strong>vtn-vlan-map-info</strong></a>
+            </td>
+            <td>
+            Describes information about VLAN mapping, which associates
+                       a VLAN with a vBridge in VTN.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-vlan-map-status"><strong>vtn-vlan-map-status</strong></a>
+            </td>
+            <td>
+            Describes runtime status information about VLAN mapping.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-vlan-map"><strong>remove-vlan-map</strong></a>
+            </td>
+            <td>
+            Remove the specified VLAN mappings from the vBridge.
+            
+                       IDs for VLAN mappings passed to `map-ids' list will be copied to
+                       the RPC output, and `status' field in the RPC output describes the
+                       result of the operation.
+            
+                       `REMOVED' indicates that the VLAN mapping specified by `map-id'
+                       field in the RPC output has been removed.
+            
+                       Null indicates that the VLAN mapping specified by `map-id' field
+                       in the RPC output is not present.
+            
+                       If no VLAN mapping ID is specified by the RPC input, all the
+                       VLAN mappings in the specified vBridge will be removed.
+                       In this case IDs for all the removed VLAN mappings will be copied
+                       to the RPC output. `remove-vlan-map-result' in the RPC output will
+                       be null if no VLAN mapping ID is specified by the RPC input and
+                       no VLAN mapping is configured in the specified vBridge.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#get-vlan-map"><strong>get-vlan-map</strong></a>
+            </td>
+            <td>
+            Search for a VLAN mapping with the specified VLAN mapping
+                       configuration in the specified vBridge.
+            
+                       If a VLAN mapping with the VLAN mapping configuration that
+                       exactly matches with the configuration specified by the RPC
+                       input is present in the specified vBridge, identifier assigned
+                       to that VLAN mapping and status information about the VLAN mapping
+                       are set to the RPC output.
+                       The RPC output will be empty if not found.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN or the vBridge specified by the RPC
+                       input is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#add-vlan-map"><strong>add-vlan-map</strong></a>
+            </td>
+            <td>
+            Configure VLAN mapping in the specified vBridge.
+            
+                       VLAN specified by the RPC input will get mapped to the specified
+                       vBridge.
+            
+                       Upon successful completion, the identifier assigned to the
+                       configured VLAN mapping and status status information about the
+                       VLAN mapping are set into the RPC output.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `CONFLICT' is set if the VLAN network speccified by the RPC input
+                       is already mapped to the specified vBridge or another vBridge.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-vlan-map-config">vtn-vlan-map-config</h3>
+        <ul>
+            <li>
+                Description: Describes configuration for a VLAN mapping.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch to be mapped.
+                
+                               If this field is specified, only the VLAN specified by
+                               `vlan-id' on the specified physical switch is mapped to
+                               vBridge.
+                               If this field is omitted, the VLAN specified by `vlan-id'
+                               on all the switches managed by the OpenDaylight controller
+                               are mapped to vBridge.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-vlan-mappable">vtn-vlan-mappable</h3>
+        <ul>
+            <li>
+                Description: Describes the data model which can contain VLAN mapping
+                           configuration.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-vlan-mappable/vlan-map">
+                list: vlan-map
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of VLAN mappings configured in this data model.
+            </li>
+            <li>
+                key definition: map-id
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-info">vtn-vlan-map-info</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: map-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier assigned to the VLAN mapping, which is
+                               unique in the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-vlan-mappable/vlan-map/vlan-map-config">
+                container: vlan-map-config
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains configuration for VLAN mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-config">vtn-vlan-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch to be mapped.
+                
+                               If this field is specified, only the VLAN specified by
+                               `vlan-id' on the specified physical switch is mapped to
+                               vBridge.
+                               If this field is omitted, the VLAN specified by `vlan-id'
+                               on all the switches managed by the OpenDaylight controller
+                               are mapped to vBridge.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-vlan-mappable/vlan-map/vlan-map-status">
+                container: vlan-map-status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains runtime status information about
+                               VLAN mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-status">vtn-vlan-map-status</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: active
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the VLAN mapping is active or not.
+                               True is set if VLAN specified by the VLAN mapping
+                               configuration is detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-vlan-map-info">vtn-vlan-map-info</h3>
+        <ul>
+            <li>
+                Description: Describes information about VLAN mapping, which associates
+                           a VLAN with a vBridge in VTN.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: map-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier assigned to the VLAN mapping, which is
+                               unique in the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-vlan-map-info/vlan-map-config">
+                container: vlan-map-config
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains configuration for VLAN mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-config">vtn-vlan-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch to be mapped.
+                
+                               If this field is specified, only the VLAN specified by
+                               `vlan-id' on the specified physical switch is mapped to
+                               vBridge.
+                               If this field is omitted, the VLAN specified by `vlan-id'
+                               on all the switches managed by the OpenDaylight controller
+                               are mapped to vBridge.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-vlan-map-info/vlan-map-status">
+                container: vlan-map-status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains runtime status information about
+                               VLAN mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-status">vtn-vlan-map-status</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: active
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the VLAN mapping is active or not.
+                               True is set if VLAN specified by the VLAN mapping
+                               configuration is detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-vlan-map-status">vtn-vlan-map-status</h3>
+        <ul>
+            <li>
+                Description: Describes runtime status information about VLAN mapping.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: active
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the VLAN mapping is active or not.
+                               True is set if VLAN specified by the VLAN mapping
+                               configuration is detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="remove-vlan-map">remove-vlan-map
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the specified VLAN mappings from the vBridge.
+                
+                           IDs for VLAN mappings passed to `map-ids' list will be copied to
+                           the RPC output, and `status' field in the RPC output describes the
+                           result of the operation.
+                
+                           `REMOVED' indicates that the VLAN mapping specified by `map-id'
+                           field in the RPC output has been removed.
+                
+                           Null indicates that the VLAN mapping specified by `map-id' field
+                           in the RPC output is not present.
+                
+                           If no VLAN mapping ID is specified by the RPC input, all the
+                           VLAN mappings in the specified vBridge will be removed.
+                           In this case IDs for all the removed VLAN mappings will be copied
+                           to the RPC output. `remove-vlan-map-result' in the RPC output will
+                           be null if no VLAN mapping ID is specified by the RPC input and
+                           no VLAN mapping is configured in the specified vBridge.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-vlan-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: map-ids
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of VLAN mapping IDs to be removed from the specified
+                                   vBridge. If this field is omitted or an empty list is
+                                   specified, all the VLAN mappings present in the specified
+                                   vBridge will be removed.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-vlan-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="remove-vlan-map/output/remove-vlan-map-result">
+                list: remove-vlan-map-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of VLAN mapping IDs and operation
+                                   results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: map-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: One of VLAN mapping ID specified by the RPC input.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="get-vlan-map">get-vlan-map
+    </h3>
+        <ul>
+            <li>
+                Description: Search for a VLAN mapping with the specified VLAN mapping
+                           configuration in the specified vBridge.
+                
+                           If a VLAN mapping with the VLAN mapping configuration that
+                           exactly matches with the configuration specified by the RPC
+                           input is present in the specified vBridge, identifier assigned
+                           to that VLAN mapping and status information about the VLAN mapping
+                           are set to the RPC output.
+                           The RPC output will be empty if not found.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN or the vBridge specified by the RPC
+                           input is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="get-vlan-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-config">vtn-vlan-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch to be mapped.
+                
+                               If this field is specified, only the VLAN specified by
+                               `vlan-id' on the specified physical switch is mapped to
+                               vBridge.
+                               If this field is omitted, the VLAN specified by `vlan-id'
+                               on all the switches managed by the OpenDaylight controller
+                               are mapped to vBridge.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="get-vlan-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-status">vtn-vlan-map-status</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: map-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier assigned to the VLAN mapping whose
+                                   configuration exactly matches the configuration specified
+                                   by the RPC input. Null is set if not found.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: active
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the VLAN mapping is active or not.
+                               True is set if VLAN specified by the VLAN mapping
+                               configuration is detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="add-vlan-map">add-vlan-map
+    </h3>
+        <ul>
+            <li>
+                Description: Configure VLAN mapping in the specified vBridge.
+                
+                           VLAN specified by the RPC input will get mapped to the specified
+                           vBridge.
+                
+                           Upon successful completion, the identifier assigned to the
+                           configured VLAN mapping and status status information about the
+                           VLAN mapping are set into the RPC output.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `CONFLICT' is set if the VLAN network speccified by the RPC input
+                           is already mapped to the specified vBridge or another vBridge.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="add-vlan-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-config">vtn-vlan-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch to be mapped.
+                
+                               If this field is specified, only the VLAN specified by
+                               `vlan-id' on the specified physical switch is mapped to
+                               vBridge.
+                               If this field is omitted, the VLAN specified by `vlan-id'
+                               on all the switches managed by the OpenDaylight controller
+                               are mapped to vBridge.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="add-vlan-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-vlan-map-status">vtn-vlan-map-status</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: map-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier assigned to newly configured VLAN mapping.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: active
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine whether the VLAN mapping is active or not.
+                               True is set if VLAN specified by the VLAN mapping
+                               configuration is detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

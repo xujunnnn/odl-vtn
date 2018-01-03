@@ -1,0 +1,73 @@
+#
+# Copyright (c) 2014-2016 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+
+[VtnOne]
+vtn_name=vtnone
+description=first vtn
+ctrl_url=/vtn/vtnone
+vtn_url=/vtns/vtnone
+
+
+[VtnTwo]
+vtn_name=vtntwo
+description=second vtn
+ctrl_url=/vtn/vtntwo
+vtn_url=/vtns/vtntwo
+
+[VtnThree]
+vtn_name=vtnthree
+description=third vtn
+ctrl_url=/vtn/vtnthree
+vtn_url=/vtns/vtnthree
+
+[VtnFour]
+vtn_name=vtnfour
+description=fourth vtn
+ctrl_url=/vtn/vtnfour
+vtn_url=/vtns/vtnfour
+
+[VTermOne]
+vterminal_name=vtermone
+controller_id=controller1
+description=first vterm for controller1
+domain_id=(DEFAULT)
+ctrl_url=/vterminal/vtermone
+vterm_url=/vterminals/vtermone
+
+[VTermTwo]
+vterminal_name=vtermtwo
+controller_id=controller1
+description=second vterm for controller1
+domain_id=(DEFAULT)
+ctrl_url=/vterminal/vtermtwo
+vterm_url=/vterminals/vtermtwo
+
+[VTermThree]
+vterminal_name=vtermthree
+controller_id=controller2
+description=first vterm for controller2
+domain_id=(DEFAULT)
+ctrl_url=/vterminal/vtermthree
+vterm_url=/vterminals/vtermthree
+
+[VTermFour]
+vterminal_name=vtermfour
+controller_id=controller2
+description=second vterm for controller2
+domain_id=(DEFAULT)
+ctrl_url=/vterminal/vtermfour
+vterm_url=/vterminals/vtermfour
+
+[VTNURL]
+url=/vtns.json
+ctr_url=/operational/vtn:vtns/vtn
+
+[VTERMURL]
+url=/vterminals.json
+ctr_url=/vterminal

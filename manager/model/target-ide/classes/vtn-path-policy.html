@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-path-policy</title>
+  </head>
+  <body>
+    <h1>vtn-path-policy</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>pathpolicy</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:pathpolicy</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-02-09</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the path policy configuration.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        vtype:vtn-types 2015-02-09;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-port-desc-result"><strong>vtn-port-desc-result</strong></a>
+            </td>
+            <td>
+            Describes a pair of `vtn-port-desc' and `vtn-update-type'.
+            
+                       This grouping is used as output of RPC that modifies the link
+                       cost configuration in a path policy.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-path-policy-config"><strong>vtn-path-policy-config</strong></a>
+            </td>
+            <td>
+            Describes configuration for a path policy.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-path-cost-config"><strong>vtn-path-cost-config</strong></a>
+            </td>
+            <td>
+            Describes the cost of using specific switch link for packet
+                       transmission.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-path-policies"><strong>vtn-path-policies</strong></a>
+            </td>
+            <td>
+            The root container of all the path policy configurations.
+                       Note that the path policy configuration must be modified by RPC.
+                       Do not edit this container directly.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-path-cost"><strong>set-path-cost</strong></a>
+            </td>
+            <td>
+            Associate the cost of transmitting a packet with the specified
+                       switch port in the specified path policy.
+            
+                       This operation takes a list of `vtn-path-cost-config', and
+                       put all configurations in that list into the specified path policy.
+            
+                       Switch port descriptors specified in the RPC input will be copied
+                       to the RPC output, and `status' field in `vtn-port-desc-result'
+                       describes the result of the opration.
+            
+                       `CREATED' indicates that the link cost configuration for the
+                       switch port specified by `port-desc' has been newly created.
+            
+                       'CHANGED' indicates that the link cost configuration for the
+                       switch port specified by `port-desc' has been successfully changed.
+            
+                       Null indicates that the link cost configuration for the switch
+                       port specified by `port-desc' was not changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the specified path policy is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-path-cost"><strong>remove-path-cost</strong></a>
+            </td>
+            <td>
+            Remove link cost configurations for all the given switch ports in
+                       the given path policy configuration.
+            
+                       Values passed to `port-desc' list will be copied to the RPC output,
+                       and `status' field in `vtn-port-desc-result' describes the result
+                       of the opration.
+            
+                       `REMOVED' indicates that the link cost configuration for the switch
+                       port associated with the `vtn-port-desc' value has been
+                       successfully removed.
+            
+                       Null indicates that the link cost configuration for the switch
+                       port specified by `port-desc' was not configured in the specified
+                       path policy.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the specified path policy is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#clear-path-policy"><strong>clear-path-policy</strong></a>
+            </td>
+            <td>
+            Remove all the path policies.
+            
+                       `status' in RPC output descripts the result of the operation.
+            
+                       `REMOVED' indicates that at least one path policy has been removed.
+            
+                       Null indicates that no path policy is present.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-path-policy"><strong>set-path-policy</strong></a>
+            </td>
+            <td>
+            Create or modify the path policy.
+            
+                       If the path policy specified by the path policy ID does not exist,
+                       a new path policy will be associated with the specified ID.
+                       If the path policy specified by the path policy ID already exists,
+                       it will be modified as specified by the RPC input.
+            
+                       `status' in RPC output describes the result of the operation.
+            
+                       `CREATED' indicates that the specified path policy has been newly
+                       created.
+            
+                       `CHANGED' indicates that existing path policy configuration has
+                       been successfully changed.
+            
+                       Null indicates that existing path policy configuration was not
+                       changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if true is set to `present' field in the RPC
+                       input and the target path policy is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-path-policy"><strong>remove-path-policy</strong></a>
+            </td>
+            <td>
+            Remove the path policy specified by the path policy identifier.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the specified path policy is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-port-desc-result">vtn-port-desc-result</h3>
+        <ul>
+            <li>
+                Description: Describes a pair of `vtn-port-desc' and `vtn-update-type'.
+                
+                           This grouping is used as output of RPC that modifies the link
+                           cost configuration in a path policy.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-path-policy-config">vtn-path-policy-config</h3>
+        <ul>
+            <li>
+                Description: Describes configuration for a path policy.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy.
+            </li>
+            <li>
+                type: <a href="#vtn-path-policy-config/id/int32">int32</a>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: default-cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The default cost for unspecified link.
+                               If the cost of outgoing switch port is not defined in
+                               `vtn-path-cost' list, this value is used as the cost.
+                               Specifying zero means that the default link cost should be
+                               determined individually by the link speed configured to a
+                               switch port. If omitted or zero is specified, the default
+                               link cost of a switch port is calculated by the following
+                               formula:
+                                      MAX(10,000,000,000,000 / (link speed (bps)), 1)
+            </li>
+            <li>
+                type: <a href="#vtn-path-policy-config/default-cost">default-cost</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-path-policy-config/vtn-path-cost">
+                list: vtn-path-cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of costs of switch links for transmitting.
+                               The cost of using the specific switch port is determined by
+                               searching for an element in this list which matches the
+                               switch port location. If multiple elements match the target
+                               switch port, the VTN Manager gives higher priority to one
+                               which specifies more extract port location.
+            </li>
+            <li>
+                key definition: port-desc
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-cost-config">vtn-path-cost-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The cost of using physical switch port.
+                               The specified cost is used when a packet is transmitted
+                               from the specified switch port. If omitted, it will be
+                               treated as if 1 is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-path-policy-config/vtn-path-cost/cost">cost</a>
+            </li>
+            <li>
+                default: 1
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-path-cost-config">vtn-path-cost-config</h3>
+        <ul>
+            <li>
+                Description: Describes the cost of using specific switch link for packet
+                           transmission.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The cost of using physical switch port.
+                               The specified cost is used when a packet is transmitted
+                               from the specified switch port. If omitted, it will be
+                               treated as if 1 is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-path-cost-config/cost">cost</a>
+            </li>
+            <li>
+                default: 1
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-path-policy</strong>
+    <ul>
+    <li>
+        <a href="#vtn-path-policies"><strong>vtn-path-policies</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#vtn-path-policies/vtn-path-policy"><strong>vtn-path-policy</strong> [id]
+            </a>
+            <ul>
+            <li>
+                <i>id</i>(U)
+            </li>
+            <li>
+                <i>default-cost</i>(U)
+            </li>
+            <li>
+                <a href="#vtn-path-policies/vtn-path-policy/vtn-path-cost"><strong><i>vtn-path-cost</i></strong> [port-desc]
+                (U)
+                </a>
+                <ul>
+                <li>
+                    <i>port-desc</i>(U)
+                </li>
+                <li>
+                    <i>cost</i>(U)
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-path-policies">vtn-path-policies</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-path-policies">
+        vtn-path-policies
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-path-policy:vtn-path-policies</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-path-policies/vtn-path-policy">vtn-path-policy</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-path-policies xmlns="urn:opendaylight:vtn:pathpolicy"&gt;<!-- Child nodes -->
+        <!-- vtn-path-policy -->
+            &lt!-- See <a href="#vtn-path-policies/vtn-path-policy">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-path-policy xmlns="urn:opendaylight:vtn:pathpolicy"&gt;...&lt;/vtn-path-policy&gt;
+        
+        &lt;/vtn-path-policies&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-path-policies/vtn-path-policy">
+        vtn-path-policies/vtn-path-policy
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-path-policy:vtn-path-policies/vtn-path-policy/{id}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>default-cost</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-path-policies/vtn-path-policy/vtn-path-cost">vtn-path-cost</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-path-policy xmlns="urn:opendaylight:vtn:pathpolicy"&gt;<!-- Child nodes -->
+        <!-- id -->
+            &lt;id xmlns="urn:opendaylight:vtn:pathpolicy"&gt;...&lt;/id&gt;
+        <!-- default-cost -->
+            &lt;default-cost xmlns="urn:opendaylight:vtn:pathpolicy"&gt;...&lt;/default-cost&gt;
+        <!-- vtn-path-cost -->
+            &lt!-- See <a href="#vtn-path-policies/vtn-path-policy/vtn-path-cost">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-path-cost xmlns="urn:opendaylight:vtn:pathpolicy"&gt;...&lt;/vtn-path-cost&gt;
+        
+        &lt;/vtn-path-policy&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-path-policies/vtn-path-policy/vtn-path-cost">
+        vtn-path-policies/vtn-path-policy/vtn-path-cost
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-path-policy:vtn-path-policies/vtn-path-policy/{id}/vtn-path-cost/{port-desc}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>port-desc</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>cost</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-path-cost xmlns="urn:opendaylight:vtn:pathpolicy"&gt;<!-- Child nodes -->
+        <!-- port-desc -->
+            &lt;port-desc xmlns="urn:opendaylight:vtn:pathpolicy"&gt;...&lt;/port-desc&gt;
+        <!-- cost -->
+            &lt;cost xmlns="urn:opendaylight:vtn:pathpolicy"&gt;...&lt;/cost&gt;
+        
+        &lt;/vtn-path-cost&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="set-path-cost">set-path-cost
+    </h3>
+        <ul>
+            <li>
+                Description: Associate the cost of transmitting a packet with the specified
+                           switch port in the specified path policy.
+                
+                           This operation takes a list of `vtn-path-cost-config', and
+                           put all configurations in that list into the specified path policy.
+                
+                           Switch port descriptors specified in the RPC input will be copied
+                           to the RPC output, and `status' field in `vtn-port-desc-result'
+                           describes the result of the opration.
+                
+                           `CREATED' indicates that the link cost configuration for the
+                           switch port specified by `port-desc' has been newly created.
+                
+                           'CHANGED' indicates that the link cost configuration for the
+                           switch port specified by `port-desc' has been successfully changed.
+                
+                           Null indicates that the link cost configuration for the switch
+                           port specified by `port-desc' was not changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the specified path policy is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-path-cost/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-path-cost/input/path-cost-list">
+                list: path-cost-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Pairs of the switch port descriptors and link cost
+                                   configuratins to be applied to the path policy specified by
+                                   `id'. Note that a duplicate switch port descriptor in this
+                                   list will cause a `BADREQUEST' error.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-cost-config">vtn-path-cost-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The cost of using physical switch port.
+                               The specified cost is used when a packet is transmitted
+                               from the specified switch port. If omitted, it will be
+                               treated as if 1 is specified.
+            </li>
+            <li>
+                type: <a href="#set-path-cost/input/path-cost-list/cost">cost</a>
+            </li>
+            <li>
+                default: 1
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-path-cost/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-path-cost/output/set-path-cost-result">
+                list: set-path-cost-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of switch port descriptors passed to the
+                                   RPC input and results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-desc-result">vtn-port-desc-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="remove-path-cost">remove-path-cost
+    </h3>
+        <ul>
+            <li>
+                Description: Remove link cost configurations for all the given switch ports in
+                           the given path policy configuration.
+                
+                           Values passed to `port-desc' list will be copied to the RPC output,
+                           and `status' field in `vtn-port-desc-result' describes the result
+                           of the opration.
+                
+                           `REMOVED' indicates that the link cost configuration for the switch
+                           port associated with the `vtn-port-desc' value has been
+                           successfully removed.
+                
+                           Null indicates that the link cost configuration for the switch
+                           port specified by `port-desc' was not configured in the specified
+                           path policy.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the specified path policy is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-path-cost/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of switch port descriptors to be removed from the
+                                   path policy configuration specified by the `id' field.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-path-cost/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="remove-path-cost/output/remove-path-cost-result">
+                list: remove-path-cost-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of switch port descriptors passed to the
+                                   RPC input and results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-port-desc-result">vtn-port-desc-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="clear-path-policy">clear-path-policy
+    </h3>
+        <ul>
+            <li>
+                Description: Remove all the path policies.
+                
+                           `status' in RPC output descripts the result of the operation.
+                
+                           `REMOVED' indicates that at least one path policy has been removed.
+                
+                           Null indicates that no path policy is present.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="clear-path-policy/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="clear-path-policy/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="set-path-policy">set-path-policy
+    </h3>
+        <ul>
+            <li>
+                Description: Create or modify the path policy.
+                
+                           If the path policy specified by the path policy ID does not exist,
+                           a new path policy will be associated with the specified ID.
+                           If the path policy specified by the path policy ID already exists,
+                           it will be modified as specified by the RPC input.
+                
+                           `status' in RPC output describes the result of the operation.
+                
+                           `CREATED' indicates that the specified path policy has been newly
+                           created.
+                
+                           `CHANGED' indicates that existing path policy configuration has
+                           been successfully changed.
+                
+                           Null indicates that existing path policy configuration was not
+                           changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if true is set to `present' field in the RPC
+                           input and the target path policy is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-path-policy/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-policy-config">vtn-path-policy-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy.
+            </li>
+            <li>
+                type: <a href="#vtn-path-policy-config/id/int32">int32</a>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: default-cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The default cost for unspecified link.
+                               If the cost of outgoing switch port is not defined in
+                               `vtn-path-cost' list, this value is used as the cost.
+                               Specifying zero means that the default link cost should be
+                               determined individually by the link speed configured to a
+                               switch port. If omitted or zero is specified, the default
+                               link cost of a switch port is calculated by the following
+                               formula:
+                                      MAX(10,000,000,000,000 / (link speed (bps)), 1)
+            </li>
+            <li>
+                type: <a href="#set-path-policy/input/default-cost">default-cost</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-path-policy/input/vtn-path-cost">
+                list: vtn-path-cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of costs of switch links for transmitting.
+                               The cost of using the specific switch port is determined by
+                               searching for an element in this list which matches the
+                               switch port location. If multiple elements match the target
+                               switch port, the VTN Manager gives higher priority to one
+                               which specifies more extract port location.
+            </li>
+            <li>
+                key definition: port-desc
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-cost-config">vtn-path-cost-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port-desc
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the location of the physical switch port.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-port-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: cost
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The cost of using physical switch port.
+                               The specified cost is used when a packet is transmitted
+                               from the specified switch port. If omitted, it will be
+                               treated as if 1 is specified.
+            </li>
+            <li>
+                type: <a href="#set-path-policy/input/vtn-path-cost/cost">cost</a>
+            </li>
+            <li>
+                default: 1
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: operation
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes how to update the specified path policy if it
+                                   already exists.
+                
+                                   If `SET' is specified, the given path policy configuration
+                                   will be applied as specified. In other words, existing
+                                   path policy configuration will be removed, and the given
+                                   path policy will be created.
+                
+                                   If `ADD' is specified, the given path policy configuration
+                                   will be merged with existing configuration. The target
+                                   path policy will be created if it is not present.
+                
+                                   Null will be treated as if `ADD' is specified.
+                
+                                   Note that the operation will fail if true is set to
+                                   `present' field and the target path policy is not
+                                   presnt.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-operation-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: present
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: If true is set, the opration will fail unless the target
+                                   path policy is present.
+                                  Null will be treated as if false is specified.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-path-policy/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="remove-path-policy">remove-path-policy
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the path policy specified by the path policy identifier.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the specified path policy is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-path-policy/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy to be removed.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-path-policy/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

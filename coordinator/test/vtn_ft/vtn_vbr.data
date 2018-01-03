@@ -1,0 +1,73 @@
+#
+# Copyright (c) 2013-2016 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+
+[VtnOne]
+vtn_name=vtnone
+description=first vtn
+ctrl_url=/vtn/vtnone
+vtn_url=/vtns/vtnone
+
+
+[VtnTwo]
+vtn_name=vtntwo
+description=second vtn
+ctrl_url=/vtn/vtntwo
+vtn_url=/vtns/vtntwo
+
+[VtnThree]
+vtn_name=vtnthree
+description=third vtn
+ctrl_url=/vtn/vtnthree
+vtn_url=/vtns/vtnthree
+
+[VtnFour]
+vtn_name=vtnfour
+description=fourth vtn
+ctrl_url=/vtn/vtnfour
+vtn_url=/vtns/vtnfour
+
+[VbrOne]
+vbr_name=vbrone
+controller_id=controller1
+description=first vbr for controller1
+domain_id=(DEFAULT)
+ctrl_url=/vbridge/vbrone
+vbr_url=/vbridges/vbrone
+
+[VbrTwo]
+vbr_name=vbrtwo
+controller_id=controller1
+description=second vbr for controller1
+domain_id=(DEFAULT)
+ctrl_url=/vbridge/vbrtwo
+vbr_url=/vbridges/vbrtwo
+
+[VbrThree]
+vbr_name=vbrthree
+controller_id=controller2
+description=first vbr for controller2
+domain_id=(DEFAULT)
+ctrl_url=/vbridge/vbrthree
+vbr_url=/vbridges/vbrthree
+
+[VbrFour]
+vbr_name=vbrfour
+controller_id=controller2
+description=second vbr for controller2
+domain_id=(DEFAULT)
+ctrl_url=/vbridge/vbrfour
+vbr_url=/vbridges/vbrfour
+
+[VTNURL]
+url=/vtns.json
+ctr_url=/operational/vtn:vtns/vtn
+
+[VBRURL]
+url=/vbridges.json
+ctr_url=/vbridge

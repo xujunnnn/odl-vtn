@@ -1,0 +1,5801 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-flow-filter</title>
+  </head>
+  <body>
+    <h1>vtn-flow-filter</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vfilter</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:flow:filter</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-09-07</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the data models for flow filter, which
+                   provides packet filtering feature for packets forwarded in VTN.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        vtype:vtn-types 2015-02-09;
+            vaction:vtn-flow-action 2015-04-10;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-filter-result"><strong>vtn-flow-filter-result</strong></a>
+            </td>
+            <td>
+            Describes pairs of flow filter indices and `vtn-update-type'
+                       values.
+            
+                       This grouping is used as output of RPC that modifies the flow
+                       filter configuration.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-filter-list"><strong>vtn-flow-filter-list</strong></a>
+            </td>
+            <td>
+            Describes a list of flow filters.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-filter-config"><strong>vtn-flow-filter-config</strong></a>
+            </td>
+            <td>
+            Describes a rule of a packet filter applied to packets
+                       forwarded in VTN. If a flow condition configured in a flow
+                       filter matches a packet, flow actions configured in `actions'
+                       are applied to the packet in ascending order of `order' field
+                       in each action.
+            
+                         - If `actions' is omitted or it is empty, the flow filter is
+                           applied to the packet without modifying the packet.
+            
+                         - Actions in `actions' field will be evaluated in ascending order
+                           of `order' value.
+            
+                         - Note that the VLAN ID of the packet cannot be modified by
+                           flow action because it is always determined by the virtual
+                           mapping configuration, such as port mapping.
+            
+                         - `actions' is ignored if the type of the flow filter is `drop'.
+            
+                       Only the following flow actions can be configured into `actions'.
+            
+                          - `vtn-set-dl-src-action'
+                          - `vtn-set-dl-dst-action'
+                          - `vtn-set-vlan-pcp-action'
+                          - `vtn-set-inet-src-action'
+                          - `vtn-set-inet-dst-action'
+                          - `vtn-set-inet-dscp-action'
+                          - `vtn-set-port-src-action'
+                          - `vtn-set-port-dst-action'
+                          - `vtn-set-icmp-type-action'
+                          - `vtn-set-icmp-code-action'
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-filter-type-fields"><strong>vtn-flow-filter-type-fields</strong></a>
+            </td>
+            <td>
+            Describes the type of flow filter.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-flow-filter-id"><strong>vtn-flow-filter-id</strong></a>
+            </td>
+            <td>
+            Specifies the target list of flow filters for RPC.
+            
+                       If `tenant-name', `bridge-name', and `interface-name' is
+                       configured, the flow filter in the virtual interface attached
+                       to the vBridge is targeted. `output' field determines the
+                       flow direction for the flow filter.
+            
+                       If `tenant-name' and `bridge-name' is configured and
+                       `interface-name' is omitted, the flow filter in the specified
+                       vBridge is targeted. `output' field determines the flow direction
+                       for the flow filter.
+            
+                       If `tenant-name', `terminal-name', and `interface-name' is
+                       configured, the flow filter in the virtual interface attached to
+                       the vTerminal is targeted. `output' field determines the flow
+                       direction for the flow filter.
+            
+                       If `tenant-name' is configured and `bridge-name', `terminal-name',
+                       and `interface-name' are omitted, the flow filter in the VTN is
+                       targeted. In this case `output' field is ignored because the VTN
+                       has a flow filter only for incoming packets.
+            
+                       Otherwise RPC will fail.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-redirect-filter-config"><strong>vtn-redirect-filter-config</strong></a>
+            </td>
+            <td>
+            Describes the configuration for the redirect flow filter.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-flow-filter"><strong>set-flow-filter</strong></a>
+            </td>
+            <td>
+            Create or modify the flow filter.
+            
+                       This operation takes a list of `vtn-flow-filter-config', and
+                       put all configurations into the flow filter list specified by
+                       `vtn-flow-filter-id' in the RPC input.
+            
+                       Flow filter indices specified in the RPC input will be copied to
+                       the RPC output, and `status' field in `vtn-flow-filter-result'
+                       describes the result of the operation. Note that a duplicate flow
+                       filter index in the RPC input will cause a `BADREQUEST' error.
+            
+                       `CREATED' indicates that new flow filter has been associated with
+                       the given index number in the specified flow filter list.
+            
+                       `CHANGED' indicates that the flow filter specified by the given
+                       index number has been modified as specified by the RPC input.
+            
+                       Null indicates that the flow filter specified by the given index
+                       was not changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the virtual node which contains the specified
+                       flow filter list is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-flow-filter"><strong>remove-flow-filter</strong></a>
+            </td>
+            <td>
+            Remove the specified flow filters.
+            
+                       Index numbers for flow filters passed to `indices' list in the RPC
+                       input will be copied to the RPC output, and `status' field in the
+                       RPC output describes the result of the operation.
+            
+                       `REMOVED' indicates that the flow filter specified by `index' field
+                       in the RPC output has been removed.
+            
+                       Null indicates that the flow filter specified by `index' field is
+                       not present in the flow filter list specified by the RPC input.
+            
+                       If no flow filter index is specified by the RPC input, all the
+                       flow filters in the specified flow filter list will be removed.
+                       In this case indices of all the removed flow filters will be copied
+                       to the RPC output. `flow-filter-result' in the RPC output will be
+                       null if no flow filter index is specified by the RPC input and
+                       the specified flow filter list is empty.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the virtual node which contains the specified
+                       flow filter list is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-flow-filter-result">vtn-flow-filter-result</h3>
+        <ul>
+            <li>
+                Description: Describes pairs of flow filter indices and `vtn-update-type'
+                           values.
+                
+                           This grouping is used as output of RPC that modifies the flow
+                           filter configuration.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-result/flow-filter-result">
+                list: flow-filter-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a pair of flow filter index and `vtn-update-type'
+                               value.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: One of flow filter indicies specified by the RPC input.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-filter-list">vtn-flow-filter-list</h3>
+        <ul>
+            <li>
+                Description: Describes a list of flow filters.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter">
+                list: vtn-flow-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of flow filters configured in a virtual node
+                               in VTN. Each flow filter in this list needs to have a unique
+                               index in `index' field. `index' value is used to determine
+                               order of flow filter evaluation. Flow filters in this list are
+                               evaluated against packet in ascending order of `index' value,
+                               and only the first matched flow filter is applied to the
+                               packet.
+            </li>
+            <li>
+                key definition: index
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-config">vtn-flow-filter-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: condition
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition that selects packets.
+                               This flow filter is invalidated if the flow condition
+                               specified by this field is not present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type">
+                choice: vtn-flow-filter-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow filter.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-drop-filter-case">
+                case: vtn-drop-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-drop-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-drop-filter-case/vtn-drop-filter">
+                container: vtn-drop-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the DROP flow filter which discards the
+                                       specified packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-pass-filter-case">
+                case: vtn-pass-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-pass-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-pass-filter-case/vtn-pass-filter">
+                container: vtn-pass-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the PASS flow filter which lets the
+                                       specified packet through the virtual node in the VTN.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-redirect-filter-case">
+                case: vtn-redirect-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-redirect-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter">
+                container: vtn-redirect-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the REDIRECT flow filter which forwards
+                                       the specified packet to another virtual interface
+                                       in the VTN.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-redirect-filter-config">vtn-redirect-filter-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter/redirect-destination">
+                container: redirect-destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the path to the virtual interface where the
+                               specified packets are forwarded.
+                
+                               - The VTN name configured in `tenant-name' field is always
+                                 ignored. The VTN name is always determined by the location
+                                 of the virtual node that contains the flow filter.
+                
+                               - The path to the virtual interface that contains this flow
+                                 filter cannot be specified.
+                
+                               - Note that every packet redirected by the flow filter is
+                                 discarded if the virtual interface specified by this field
+                                 is not present in the  VTN.
+                
+                               Packet redirection should be configured not to cause the
+                               packet loop. The number of virtual node hops per a flow
+                               (the number of packet redirections) is limited to 100.
+                               If the number of virtual node hops exceeds the limit,
+                               it is treated as the packet loop and then the packet is
+                               discarded.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine the direction of the packet redirection.
+                
+                               - If true is specified, the packet is redirected as outgoing
+                                 packet.
+                                 + The redirected packet will be treated as if it is
+                                   transmitted from the virtual interface specified by
+                                   `redirect-destination'.
+                                 + A list of flow filters for outgoing packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   wil be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is
+                                   transmitted to the physical network mapped to the virtual
+                                   interface by port mapping. The packet will be discarded
+                                   if port mapping is not configured to the virtual interface.
+                
+                               - If false is specified or omitted, the packet is redirected
+                                 as incoming packet.
+                                 + The redirected packet will be treated as if it is received
+                                   from the virtual interface specified by
+                                   `redirect-destination'.
+                                   The packet is redirected even if no physical network is
+                                   mapped to the destination virtual interface by port
+                                   mapping.
+                                 + A list of flow filters for incoming packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   will be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is forwarded
+                                   to the virtual node that contains the virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action">
+                list: vtn-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of flow actions supported by the VTN Manager.
+                               Each action in this list needs to have a unique index value in
+                               `order' field. Flow actions in a flow entry are sorted by
+                               `order' field in ascending order.
+            </li>
+            <li>
+                key definition: order
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ordered-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: order
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action">
+                choice: vtn-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow action.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-drop-action-case">
+                case: vtn-drop-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-drop-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-drop-action-case/vtn-drop-action">
+                container: vtn-drop-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that drops every packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case">
+                case: vtn-pop-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-pop-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case/vtn-pop-vlan-action">
+                container: vtn-pop-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that strips the outermost
+                                       VLAN  tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-push-vlan-action-case">
+                case: vtn-push-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-push-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-push-vlan-action-case/vtn-push-vlan-action">
+                container: vtn-push-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that adds a VLAN tag into
+                                       packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the type for a new VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case">
+                case: vtn-set-dl-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case/vtn-set-dl-dst-action">
+                container: vtn-set-dl-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination  MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-dladdr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case">
+                case: vtn-set-dl-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case/vtn-set-dl-src-action">
+                container: vtn-set-dl-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-dladdr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case">
+                case: vtn-set-icmp-code-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-code-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action">
+                container: vtn-set-icmp-code-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP code into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action/code">code</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case">
+                case: vtn-set-icmp-type-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-type-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action">
+                container: vtn-set-icmp-type-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP type into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action/type">type</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case">
+                case: vtn-set-inet-dscp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dscp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action">
+                container: vtn-set-inet-dscp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified IP
+                                       DSCP value into the IP header.
+                                       Currently, only IPv4 packet can be modified by this
+                                       action.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The DSCP value to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action/dscp">dscp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case">
+                case: vtn-set-inet-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action">
+                container: vtn-set-inet-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ipaddr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case">
+                case: vtn-set-inet-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action">
+                container: vtn-set-inet-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ipaddr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case">
+                case: vtn-set-port-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action">
+                container: vtn-set-port-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-port-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-src-action-case">
+                case: vtn-set-port-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action">
+                container: vtn-set-port-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-port-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case">
+                case: vtn-set-vlan-id-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-id-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action">
+                container: vtn-set-vlan-id-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN ID into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID to be set.
+                                           Note that zero cannot be specified. If you need
+                                           a flow action which removes VLAN tag from packets,
+                                           use `vtn-pop-vlan-action' instead.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:flow:action)uint16
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case">
+                case: vtn-set-vlan-pcp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-pcp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action">
+                container: vtn-set-vlan-pcp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN priority into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority to be set.
+                                          If this field is omitted, it will be treated as zero
+                                          is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-list/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action/vlan-pcp">vlan-pcp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-filter-config">vtn-flow-filter-config</h3>
+        <ul>
+            <li>
+                Description: Describes a rule of a packet filter applied to packets
+                           forwarded in VTN. If a flow condition configured in a flow
+                           filter matches a packet, flow actions configured in `actions'
+                           are applied to the packet in ascending order of `order' field
+                           in each action.
+                
+                             - If `actions' is omitted or it is empty, the flow filter is
+                               applied to the packet without modifying the packet.
+                
+                             - Actions in `actions' field will be evaluated in ascending order
+                               of `order' value.
+                
+                             - Note that the VLAN ID of the packet cannot be modified by
+                               flow action because it is always determined by the virtual
+                               mapping configuration, such as port mapping.
+                
+                             - `actions' is ignored if the type of the flow filter is `drop'.
+                
+                           Only the following flow actions can be configured into `actions'.
+                
+                              - `vtn-set-dl-src-action'
+                              - `vtn-set-dl-dst-action'
+                              - `vtn-set-vlan-pcp-action'
+                              - `vtn-set-inet-src-action'
+                              - `vtn-set-inet-dst-action'
+                              - `vtn-set-inet-dscp-action'
+                              - `vtn-set-port-src-action'
+                              - `vtn-set-port-dst-action'
+                              - `vtn-set-icmp-type-action'
+                              - `vtn-set-icmp-code-action'
+            </li>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: condition
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition that selects packets.
+                               This flow filter is invalidated if the flow condition
+                               specified by this field is not present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type">
+                choice: vtn-flow-filter-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow filter.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-drop-filter-case">
+                case: vtn-drop-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-drop-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-drop-filter-case/vtn-drop-filter">
+                container: vtn-drop-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the DROP flow filter which discards the
+                                       specified packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-pass-filter-case">
+                case: vtn-pass-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-pass-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-pass-filter-case/vtn-pass-filter">
+                container: vtn-pass-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the PASS flow filter which lets the
+                                       specified packet through the virtual node in the VTN.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-redirect-filter-case">
+                case: vtn-redirect-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-redirect-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter">
+                container: vtn-redirect-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the REDIRECT flow filter which forwards
+                                       the specified packet to another virtual interface
+                                       in the VTN.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-redirect-filter-config">vtn-redirect-filter-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter/redirect-destination">
+                container: redirect-destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the path to the virtual interface where the
+                               specified packets are forwarded.
+                
+                               - The VTN name configured in `tenant-name' field is always
+                                 ignored. The VTN name is always determined by the location
+                                 of the virtual node that contains the flow filter.
+                
+                               - The path to the virtual interface that contains this flow
+                                 filter cannot be specified.
+                
+                               - Note that every packet redirected by the flow filter is
+                                 discarded if the virtual interface specified by this field
+                                 is not present in the  VTN.
+                
+                               Packet redirection should be configured not to cause the
+                               packet loop. The number of virtual node hops per a flow
+                               (the number of packet redirections) is limited to 100.
+                               If the number of virtual node hops exceeds the limit,
+                               it is treated as the packet loop and then the packet is
+                               discarded.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine the direction of the packet redirection.
+                
+                               - If true is specified, the packet is redirected as outgoing
+                                 packet.
+                                 + The redirected packet will be treated as if it is
+                                   transmitted from the virtual interface specified by
+                                   `redirect-destination'.
+                                 + A list of flow filters for outgoing packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   wil be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is
+                                   transmitted to the physical network mapped to the virtual
+                                   interface by port mapping. The packet will be discarded
+                                   if port mapping is not configured to the virtual interface.
+                
+                               - If false is specified or omitted, the packet is redirected
+                                 as incoming packet.
+                                 + The redirected packet will be treated as if it is received
+                                   from the virtual interface specified by
+                                   `redirect-destination'.
+                                   The packet is redirected even if no physical network is
+                                   mapped to the destination virtual interface by port
+                                   mapping.
+                                 + A list of flow filters for incoming packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   will be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is forwarded
+                                   to the virtual node that contains the virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action">
+                list: vtn-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of flow actions supported by the VTN Manager.
+                               Each action in this list needs to have a unique index value in
+                               `order' field. Flow actions in a flow entry are sorted by
+                               `order' field in ascending order.
+            </li>
+            <li>
+                key definition: order
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ordered-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: order
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action">
+                choice: vtn-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow action.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-drop-action-case">
+                case: vtn-drop-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-drop-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-drop-action-case/vtn-drop-action">
+                container: vtn-drop-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that drops every packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case">
+                case: vtn-pop-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-pop-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case/vtn-pop-vlan-action">
+                container: vtn-pop-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that strips the outermost
+                                       VLAN  tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-push-vlan-action-case">
+                case: vtn-push-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-push-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-push-vlan-action-case/vtn-push-vlan-action">
+                container: vtn-push-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that adds a VLAN tag into
+                                       packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the type for a new VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case">
+                case: vtn-set-dl-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case/vtn-set-dl-dst-action">
+                container: vtn-set-dl-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination  MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-dladdr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case">
+                case: vtn-set-dl-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case/vtn-set-dl-src-action">
+                container: vtn-set-dl-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-dladdr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case">
+                case: vtn-set-icmp-code-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-code-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action">
+                container: vtn-set-icmp-code-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP code into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action/code">code</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case">
+                case: vtn-set-icmp-type-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-type-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action">
+                container: vtn-set-icmp-type-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP type into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action/type">type</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case">
+                case: vtn-set-inet-dscp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dscp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action">
+                container: vtn-set-inet-dscp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified IP
+                                       DSCP value into the IP header.
+                                       Currently, only IPv4 packet can be modified by this
+                                       action.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The DSCP value to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action/dscp">dscp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case">
+                case: vtn-set-inet-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action">
+                container: vtn-set-inet-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ipaddr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case">
+                case: vtn-set-inet-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action">
+                container: vtn-set-inet-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ipaddr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case">
+                case: vtn-set-port-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action">
+                container: vtn-set-port-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-port-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-port-src-action-case">
+                case: vtn-set-port-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action">
+                container: vtn-set-port-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-port-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case">
+                case: vtn-set-vlan-id-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-id-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action">
+                container: vtn-set-vlan-id-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN ID into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID to be set.
+                                           Note that zero cannot be specified. If you need
+                                           a flow action which removes VLAN tag from packets,
+                                           use `vtn-pop-vlan-action' instead.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:flow:action)uint16
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case">
+                case: vtn-set-vlan-pcp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-pcp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action">
+                container: vtn-set-vlan-pcp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN priority into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority to be set.
+                                          If this field is omitted, it will be treated as zero
+                                          is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-flow-filter-config/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action/vlan-pcp">vlan-pcp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-filter-type-fields">vtn-flow-filter-type-fields</h3>
+        <ul>
+            <li>
+                Description: Describes the type of flow filter.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type">
+                choice: vtn-flow-filter-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow filter.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-drop-filter-case">
+                case: vtn-drop-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-drop-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-drop-filter-case/vtn-drop-filter">
+                container: vtn-drop-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the DROP flow filter which discards the
+                                       specified packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-pass-filter-case">
+                case: vtn-pass-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-pass-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-pass-filter-case/vtn-pass-filter">
+                container: vtn-pass-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the PASS flow filter which lets the
+                                       specified packet through the virtual node in the VTN.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-redirect-filter-case">
+                case: vtn-redirect-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-redirect-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter">
+                container: vtn-redirect-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the REDIRECT flow filter which forwards
+                                       the specified packet to another virtual interface
+                                       in the VTN.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-redirect-filter-config">vtn-redirect-filter-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-flow-filter-type-fields/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter/redirect-destination">
+                container: redirect-destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the path to the virtual interface where the
+                               specified packets are forwarded.
+                
+                               - The VTN name configured in `tenant-name' field is always
+                                 ignored. The VTN name is always determined by the location
+                                 of the virtual node that contains the flow filter.
+                
+                               - The path to the virtual interface that contains this flow
+                                 filter cannot be specified.
+                
+                               - Note that every packet redirected by the flow filter is
+                                 discarded if the virtual interface specified by this field
+                                 is not present in the  VTN.
+                
+                               Packet redirection should be configured not to cause the
+                               packet loop. The number of virtual node hops per a flow
+                               (the number of packet redirections) is limited to 100.
+                               If the number of virtual node hops exceeds the limit,
+                               it is treated as the packet loop and then the packet is
+                               discarded.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine the direction of the packet redirection.
+                
+                               - If true is specified, the packet is redirected as outgoing
+                                 packet.
+                                 + The redirected packet will be treated as if it is
+                                   transmitted from the virtual interface specified by
+                                   `redirect-destination'.
+                                 + A list of flow filters for outgoing packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   wil be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is
+                                   transmitted to the physical network mapped to the virtual
+                                   interface by port mapping. The packet will be discarded
+                                   if port mapping is not configured to the virtual interface.
+                
+                               - If false is specified or omitted, the packet is redirected
+                                 as incoming packet.
+                                 + The redirected packet will be treated as if it is received
+                                   from the virtual interface specified by
+                                   `redirect-destination'.
+                                   The packet is redirected even if no physical network is
+                                   mapped to the destination virtual interface by port
+                                   mapping.
+                                 + A list of flow filters for incoming packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   will be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is forwarded
+                                   to the virtual node that contains the virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-flow-filter-id">vtn-flow-filter-id</h3>
+        <ul>
+            <li>
+                Description: Specifies the target list of flow filters for RPC.
+                
+                           If `tenant-name', `bridge-name', and `interface-name' is
+                           configured, the flow filter in the virtual interface attached
+                           to the vBridge is targeted. `output' field determines the
+                           flow direction for the flow filter.
+                
+                           If `tenant-name' and `bridge-name' is configured and
+                           `interface-name' is omitted, the flow filter in the specified
+                           vBridge is targeted. `output' field determines the flow direction
+                           for the flow filter.
+                
+                           If `tenant-name', `terminal-name', and `interface-name' is
+                           configured, the flow filter in the virtual interface attached to
+                           the vTerminal is targeted. `output' field determines the flow
+                           direction for the flow filter.
+                
+                           If `tenant-name' is configured and `bridge-name', `terminal-name',
+                           and `interface-name' are omitted, the flow filter in the VTN is
+                           targeted. In this case `output' field is ignored because the VTN
+                           has a flow filter only for incoming packets.
+                
+                           Otherwise RPC will fail.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow direction for the flow filter.
+                
+                               If true, the flow filter list for outgoing packets is targeted.
+                               If false or omitted, the flow filter list for incoming packets
+                               is targeted.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-redirect-filter-config">vtn-redirect-filter-config</h3>
+        <ul>
+            <li>
+                Description: Describes the configuration for the redirect flow filter.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-redirect-filter-config/redirect-destination">
+                container: redirect-destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the path to the virtual interface where the
+                               specified packets are forwarded.
+                
+                               - The VTN name configured in `tenant-name' field is always
+                                 ignored. The VTN name is always determined by the location
+                                 of the virtual node that contains the flow filter.
+                
+                               - The path to the virtual interface that contains this flow
+                                 filter cannot be specified.
+                
+                               - Note that every packet redirected by the flow filter is
+                                 discarded if the virtual interface specified by this field
+                                 is not present in the  VTN.
+                
+                               Packet redirection should be configured not to cause the
+                               packet loop. The number of virtual node hops per a flow
+                               (the number of packet redirections) is limited to 100.
+                               If the number of virtual node hops exceeds the limit,
+                               it is treated as the packet loop and then the packet is
+                               discarded.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine the direction of the packet redirection.
+                
+                               - If true is specified, the packet is redirected as outgoing
+                                 packet.
+                                 + The redirected packet will be treated as if it is
+                                   transmitted from the virtual interface specified by
+                                   `redirect-destination'.
+                                 + A list of flow filters for outgoing packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   wil be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is
+                                   transmitted to the physical network mapped to the virtual
+                                   interface by port mapping. The packet will be discarded
+                                   if port mapping is not configured to the virtual interface.
+                
+                               - If false is specified or omitted, the packet is redirected
+                                 as incoming packet.
+                                 + The redirected packet will be treated as if it is received
+                                   from the virtual interface specified by
+                                   `redirect-destination'.
+                                   The packet is redirected even if no physical network is
+                                   mapped to the destination virtual interface by port
+                                   mapping.
+                                 + A list of flow filters for incoming packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   will be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is forwarded
+                                   to the virtual node that contains the virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="set-flow-filter">set-flow-filter
+    </h3>
+        <ul>
+            <li>
+                Description: Create or modify the flow filter.
+                
+                           This operation takes a list of `vtn-flow-filter-config', and
+                           put all configurations into the flow filter list specified by
+                           `vtn-flow-filter-id' in the RPC input.
+                
+                           Flow filter indices specified in the RPC input will be copied to
+                           the RPC output, and `status' field in `vtn-flow-filter-result'
+                           describes the result of the operation. Note that a duplicate flow
+                           filter index in the RPC input will cause a `BADREQUEST' error.
+                
+                           `CREATED' indicates that new flow filter has been associated with
+                           the given index number in the specified flow filter list.
+                
+                           `CHANGED' indicates that the flow filter specified by the given
+                           index number has been modified as specified by the RPC input.
+                
+                           Null indicates that the flow filter specified by the given index
+                           was not changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the virtual node which contains the specified
+                           flow filter list is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-list">vtn-flow-filter-list</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-id">vtn-flow-filter-id</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow direction for the flow filter.
+                
+                               If true, the flow filter list for outgoing packets is targeted.
+                               If false or omitted, the flow filter list for incoming packets
+                               is targeted.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter">
+                list: vtn-flow-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of flow filters configured in a virtual node
+                               in VTN. Each flow filter in this list needs to have a unique
+                               index in `index' field. `index' value is used to determine
+                               order of flow filter evaluation. Flow filters in this list are
+                               evaluated against packet in ascending order of `index' value,
+                               and only the first matched flow filter is applied to the
+                               packet.
+            </li>
+            <li>
+                key definition: index
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-config">vtn-flow-filter-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: condition
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition that selects packets.
+                               This flow filter is invalidated if the flow condition
+                               specified by this field is not present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type">
+                choice: vtn-flow-filter-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow filter.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-drop-filter-case">
+                case: vtn-drop-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-drop-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-drop-filter-case/vtn-drop-filter">
+                container: vtn-drop-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the DROP flow filter which discards the
+                                       specified packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-pass-filter-case">
+                case: vtn-pass-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-pass-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-pass-filter-case/vtn-pass-filter">
+                container: vtn-pass-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the PASS flow filter which lets the
+                                       specified packet through the virtual node in the VTN.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-redirect-filter-case">
+                case: vtn-redirect-filter-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-flow-filter-type' choice for the
+                                   `vtn-redirect-filter'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter">
+                container: vtn-redirect-filter
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the REDIRECT flow filter which forwards
+                                       the specified packet to another virtual interface
+                                       in the VTN.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-redirect-filter-config">vtn-redirect-filter-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-filter-type/vtn-redirect-filter-case/vtn-redirect-filter/redirect-destination">
+                container: redirect-destination
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the path to the virtual interface where the
+                               specified packets are forwarded.
+                
+                               - The VTN name configured in `tenant-name' field is always
+                                 ignored. The VTN name is always determined by the location
+                                 of the virtual node that contains the flow filter.
+                
+                               - The path to the virtual interface that contains this flow
+                                 filter cannot be specified.
+                
+                               - Note that every packet redirected by the flow filter is
+                                 discarded if the virtual interface specified by this field
+                                 is not present in the  VTN.
+                
+                               Packet redirection should be configured not to cause the
+                               packet loop. The number of virtual node hops per a flow
+                               (the number of packet redirections) is limited to 100.
+                               If the number of virtual node hops exceeds the limit,
+                               it is treated as the packet loop and then the packet is
+                               discarded.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vnode-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Determine the direction of the packet redirection.
+                
+                               - If true is specified, the packet is redirected as outgoing
+                                 packet.
+                                 + The redirected packet will be treated as if it is
+                                   transmitted from the virtual interface specified by
+                                   `redirect-destination'.
+                                 + A list of flow filters for outgoing packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   wil be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is
+                                   transmitted to the physical network mapped to the virtual
+                                   interface by port mapping. The packet will be discarded
+                                   if port mapping is not configured to the virtual interface.
+                
+                               - If false is specified or omitted, the packet is redirected
+                                 as incoming packet.
+                                 + The redirected packet will be treated as if it is received
+                                   from the virtual interface specified by
+                                   `redirect-destination'.
+                                   The packet is redirected even if no physical network is
+                                   mapped to the destination virtual interface by port
+                                   mapping.
+                                 + A list of flow filters for incoming packets configured in
+                                   the virtual interface specified by `redirect-destination'
+                                   will be evaluated against the redirected packet.
+                                   If the packet is passed by the flow filter, it is forwarded
+                                   to the virtual node that contains the virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action">
+                list: vtn-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of flow actions supported by the VTN Manager.
+                               Each action in this list needs to have a unique index value in
+                               `order' field. Flow actions in a flow entry are sorted by
+                               `order' field in ascending order.
+            </li>
+            <li>
+                key definition: order
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ordered-flow-action
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: order
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action">
+                choice: vtn-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the abstract type of flow action.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-drop-action-case">
+                case: vtn-drop-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-drop-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-drop-action-case/vtn-drop-action">
+                container: vtn-drop-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that drops every packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case">
+                case: vtn-pop-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-pop-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-pop-vlan-action-case/vtn-pop-vlan-action">
+                container: vtn-pop-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that strips the outermost
+                                       VLAN  tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-push-vlan-action-case">
+                case: vtn-push-vlan-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-push-vlan-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-push-vlan-action-case/vtn-push-vlan-action">
+                container: vtn-push-vlan-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that adds a VLAN tag into
+                                       packet.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the type for a new VLAN tag.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case">
+                case: vtn-set-dl-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-dst-action-case/vtn-set-dl-dst-action">
+                container: vtn-set-dl-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination  MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-dladdr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case">
+                case: vtn-set-dl-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-dl-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-dl-src-action-case/vtn-set-dl-src-action">
+                container: vtn-set-dl-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source MAC address into the Ethernet header.
+                                       Node that the following MAC address cannot be specified.
+                                       - Broadcast address
+                                       - Multicast address
+                                       - Zero
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-dladdr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the MAC address to be set into packet.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case">
+                case: vtn-set-icmp-code-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-code-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action">
+                container: vtn-set-icmp-code-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP code into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: code
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP code to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-code-action-case/vtn-set-icmp-code-action/code">code</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case">
+                case: vtn-set-icmp-type-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-icmp-type-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action">
+                container: vtn-set-icmp-type-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       ICMP type into the ICMP header.
+                                       Currently, this action only affects ICMP packet on
+                                       IPv4.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The ICMP type to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-icmp-type-action-case/vtn-set-icmp-type-action/type">type</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case">
+                case: vtn-set-inet-dscp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dscp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action">
+                container: vtn-set-inet-dscp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified IP
+                                       DSCP value into the IP header.
+                                       Currently, only IPv4 packet can be modified by this
+                                       action.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: dscp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The DSCP value to be set.
+                                           If this field is omitted, it will be treated as
+                                           zero is specified.
+            </li>
+            <li>
+                type: <a href="#set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dscp-action-case/vtn-set-inet-dscp-action/dscp">dscp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case">
+                case: vtn-set-inet-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action">
+                container: vtn-set-inet-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ipaddr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-dst-action-case/vtn-set-inet-dst-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case">
+                case: vtn-set-inet-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-inet-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action">
+                container: vtn-set-inet-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source IP address into the IP header.
+                                       Currently, only IPv4 address can be specified and this
+                                       action affects only IPv4 packet.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-ipaddr-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address">
+                choice: address
+            </li>
+            </strong>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv4">
+                case: ipv4
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv4-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv4-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-inet-src-action-case/vtn-set-inet-src-action/address/ipv6">
+                case: ipv6
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: ipv6-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-inet-types)ipv6-prefix
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case">
+                case: vtn-set-port-dst-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-dst-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action">
+                container: vtn-set-port-dst-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       destination port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-port-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-dst-action-case/vtn-set-port-dst-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-src-action-case">
+                case: vtn-set-port-src-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-port-src-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action">
+                container: vtn-set-port-src-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       source port number into the TCP or UDP header.
+                                       Currently, this action only affects TCP or UDP packet
+                                       on IPv4.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:flow:action)vtn-port-action-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: port
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the port number to be set.
+                               If this field is omitted, it will be treated as zero is
+                               specified.
+            </li>
+            <li>
+                type: <a href="#set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-port-src-action-case/vtn-set-port-src-action/port">port</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case">
+                case: vtn-set-vlan-id-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-id-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-id-action-case/vtn-set-vlan-id-action">
+                container: vtn-set-vlan-id-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN ID into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN ID to be set.
+                                           Note that zero cannot be specified. If you need
+                                           a flow action which removes VLAN tag from packets,
+                                           use `vtn-pop-vlan-action' instead.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:flow:action)uint16
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case">
+                case: vtn-set-vlan-pcp-action-case
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The branch of the `vtn-action' choice for the
+                                   `vtn-set-vlan-pcp-action'.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action">
+                container: vtn-set-vlan-pcp-action
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow action that sets the specified
+                                       VLAN priority into the IEEE 802.1Q VLAN tag.
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-pcp
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The VLAN priority to be set.
+                                          If this field is omitted, it will be treated as zero
+                                          is specified.
+            </li>
+            <li>
+                type: <a href="#set-flow-filter/input/vtn-flow-filter/vtn-flow-action/vtn-action/vtn-set-vlan-pcp-action-case/vtn-set-vlan-pcp-action/vlan-pcp">vlan-pcp</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-result">vtn-flow-filter-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-flow-filter/output/flow-filter-result">
+                list: flow-filter-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a pair of flow filter index and `vtn-update-type'
+                               value.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: One of flow filter indicies specified by the RPC input.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="remove-flow-filter">remove-flow-filter
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the specified flow filters.
+                
+                           Index numbers for flow filters passed to `indices' list in the RPC
+                           input will be copied to the RPC output, and `status' field in the
+                           RPC output describes the result of the operation.
+                
+                           `REMOVED' indicates that the flow filter specified by `index' field
+                           in the RPC output has been removed.
+                
+                           Null indicates that the flow filter specified by `index' field is
+                           not present in the flow filter list specified by the RPC input.
+                
+                           If no flow filter index is specified by the RPC input, all the
+                           flow filters in the specified flow filter list will be removed.
+                           In this case indices of all the removed flow filters will be copied
+                           to the RPC output. `flow-filter-result' in the RPC output will be
+                           null if no flow filter index is specified by the RPC input and
+                           the specified flow filter list is empty.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the virtual node which contains the specified
+                           flow filter list is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-flow-filter/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-id">vtn-flow-filter-id</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: output
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the flow direction for the flow filter.
+                
+                               If true, the flow filter list for outgoing packets is targeted.
+                               If false or omitted, the flow filter list for incoming packets
+                               is targeted.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vBridge nor a virtual node attached to the
+                               vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: router-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vRouter.
+                               Currently the VTN Manager never uses this field because the
+                               virtual router is not yet supported.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: terminal-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vTerminal.
+                               This field is ignored if `bridge-name' field is configured.
+                               This field is omitted if the virtual node specified by this
+                               model is neither a vTerminal nor a virtual node attached to
+                               the vTerminal.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: interface-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the virtual interface.
+                
+                               - If the virtual interface specified by this model is attached
+                                 to a vBridge, the name of the vBridge is set to `bridge-name'
+                                 field.
+                               - If the virtual interface specified by this model is attached
+                                 to a vTerminal, the name of the vTerminal is set to
+                                 `terminal-name' field.
+                               - This field is omitted if the virtual node specified by this
+                                 model is not a virtual interface.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: indices
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of flow filter index numbers to be removed from the
+                                   flow filter list specified by the RPC input.
+                                   If this field is omitted or an empty list is specified,
+                                   all the flow filters present in the specified flow filter
+                                   list will be removed.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: int32
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-flow-filter/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-flow-filter-result">vtn-flow-filter-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="remove-flow-filter/output/flow-filter-result">
+                list: flow-filter-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a pair of flow filter index and `vtn-update-type'
+                               value.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: One of flow filter indicies specified by the RPC input.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

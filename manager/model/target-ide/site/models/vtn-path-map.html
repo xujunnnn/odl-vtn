@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-path-map</title>
+  </head>
+  <body>
+    <h1>vtn-path-map</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>pathmap</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:pathmap</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-03-28</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the path map configuration.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        vtype:vtn-types 2015-02-09;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-path-map-result"><strong>vtn-path-map-result</strong></a>
+            </td>
+            <td>
+            Describes a pair of path map index and `vtn-update-type'.
+            
+                       This grouping is used as output of RPC that modifies the global or
+                       VTN path map configuration.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-path-map-config"><strong>vtn-path-map-config</strong></a>
+            </td>
+            <td>
+            Describes configuration for a path map.
+                       If `idle-timeout' field is configured, `hard-timeout' field also
+                       needs to be configured. If both `idle-timeout' and `hard-timeout'
+                       fields contain non-zero values, the value configured in
+                       `hard-timeout' needs to be greater than the value configured in
+                       `idle-timeout'.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-path-map-list"><strong>vtn-path-map-list</strong></a>
+            </td>
+            <td>
+            A container that holds a list of path map configurations.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#global-path-maps"><strong>global-path-maps</strong></a>
+            </td>
+            <td>
+            The root container of all the global path map configurations.
+                       Global path maps affect flows in all VTNs, but the VTN path maps
+                       are always evaluated prior to the global path maps. Global path
+                       maps will be evaluated only if a packet does not match any VTN
+                       path map.
+                       Note that the path map configuration must be modified by RPC.
+                       Do not edit this container directly.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-path-map"><strong>remove-path-map</strong></a>
+            </td>
+            <td>
+            Remove the path map configuration in the global or VTN path map.
+            
+                       Values passed to `map-index' list will be copied to the RPC
+                       output, and `status' field in `vtn-path-map-result' describes
+                       the result of the operation.
+            
+                       `REMOVED' indicates that the path map associated with the map index
+                       has been successfully removed.
+            
+                       Null indicates that the path map is not associated with the map
+                       index in the specified path map.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by the name is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-path-map"><strong>set-path-map</strong></a>
+            </td>
+            <td>
+            Create or modify the global or VTN path map.
+            
+                       This operation takes a list of `vtn-path-map-config', and
+                       put all configurations into the specified path map list.
+                       If the name of the VTN is specified, the given path maps are
+                       configured as the VTN path map. Otherwise they are configured as
+                       the global path map.
+            
+                       Path map indices specified in the RPC input will be copied to the
+                       RPC output, and `status' field in `vtn-path-map-result' describes
+                       the result of the operation.
+            
+                       `CREATED' indicates that the path map configuration specified by
+                       the index value has been newly created.
+            
+                       `CHANGED' indicates that the path map configuration specified by
+                       the index value has been successfully changed.
+            
+                       Null indicates that the path map configuration specified by the
+                       index value was not changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by the name is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#clear-path-map"><strong>clear-path-map</strong></a>
+            </td>
+            <td>
+            Remove all the path map configurations present in the global or
+                       VTN path map container.
+            
+                       `status' in RPC output descripts the result of the operation.
+            
+                       `REMOVED' indicates that at least one path map in the specified
+                       path map container has been removed.
+            
+                       Null indicates that no configuration is present in the specified
+                       path map.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by the name is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-path-map-result">vtn-path-map-result</h3>
+        <ul>
+            <li>
+                Description: Describes a pair of path map index and `vtn-update-type'.
+                
+                           This grouping is used as output of RPC that modifies the global or
+                           VTN path map configuration.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that specifies the flow match in the flow
+                               condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-path-map-config">vtn-path-map-config</h3>
+        <ul>
+            <li>
+                Description: Describes configuration for a path map.
+                           If `idle-timeout' field is configured, `hard-timeout' field also
+                           needs to be configured. If both `idle-timeout' and `hard-timeout'
+                           fields contain non-zero values, the value configured in
+                           `hard-timeout' needs to be greater than the value configured in
+                           `idle-timeout'.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: condition
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition that selects packets.
+                               This path map is invalidated if the flow condition specified
+                               by this field is not present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: policy
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy which determines the route
+                               of packets.
+                               This path map is invalidated if the path policy specified by
+                               this field is not present.
+                               Zero specifies the system default path policy which
+                               minimizes the number of hops in the packet route.
+                               If omitted, it will be treated as if zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-path-map-config/policy">policy</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: idle-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `idle-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: hard-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `hard-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-path-map-list">vtn-path-map-list</h3>
+        <ul>
+            <li>
+                Description: A container that holds a list of path map configurations.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-path-map-list/vtn-path-map">
+                list: vtn-path-map
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of path maps.
+            </li>
+            <li>
+                key definition: index
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-map-config">vtn-path-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: condition
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition that selects packets.
+                               This path map is invalidated if the flow condition specified
+                               by this field is not present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: policy
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy which determines the route
+                               of packets.
+                               This path map is invalidated if the path policy specified by
+                               this field is not present.
+                               Zero specifies the system default path policy which
+                               minimizes the number of hops in the packet route.
+                               If omitted, it will be treated as if zero is specified.
+            </li>
+            <li>
+                type: <a href="#vtn-path-map-list/vtn-path-map/policy">policy</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: idle-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `idle-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: hard-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `hard-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-path-map</strong>
+    <ul>
+    <li>
+        <a href="#global-path-maps"><strong>global-path-maps</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#global-path-maps/vtn-path-map"><strong><i>vtn-path-map</i></strong> [index]
+            (U)
+            </a>
+            <ul>
+            <li>
+                <i>condition</i>(U)
+            </li>
+            <li>
+                <i>policy</i>(U)
+            </li>
+            <li>
+                <i>index</i>(U)
+            </li>
+            <li>
+                <i>idle-timeout</i>(U)
+            </li>
+            <li>
+                <i>hard-timeout</i>(U)
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#global-path-maps">global-path-maps</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="global-path-maps">
+        global-path-maps
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-path-map:global-path-maps</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#global-path-maps/vtn-path-map">vtn-path-map</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;global-path-maps xmlns="urn:opendaylight:vtn:pathmap"&gt;<!-- Child nodes -->
+        <!-- vtn-path-map -->
+            &lt!-- See <a href="#global-path-maps/vtn-path-map">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;vtn-path-map xmlns="urn:opendaylight:vtn:pathmap"&gt;...&lt;/vtn-path-map&gt;
+        
+        &lt;/global-path-maps&gt;
+    </pre>
+    </h3>
+    <h3 id="global-path-maps/vtn-path-map">
+        global-path-maps/vtn-path-map
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-path-map:global-path-maps/vtn-path-map/{index}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>condition</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>policy</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>index</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>idle-timeout</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>hard-timeout</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-path-map xmlns="urn:opendaylight:vtn:pathmap"&gt;<!-- Child nodes -->
+        <!-- condition -->
+            &lt;condition xmlns="urn:opendaylight:vtn:pathmap"&gt;...&lt;/condition&gt;
+        <!-- policy -->
+            &lt;policy xmlns="urn:opendaylight:vtn:pathmap"&gt;...&lt;/policy&gt;
+        <!-- index -->
+            &lt;index xmlns="urn:opendaylight:vtn:pathmap"&gt;...&lt;/index&gt;
+        <!-- idle-timeout -->
+            &lt;idle-timeout xmlns="urn:opendaylight:vtn:pathmap"&gt;...&lt;/idle-timeout&gt;
+        <!-- hard-timeout -->
+            &lt;hard-timeout xmlns="urn:opendaylight:vtn:pathmap"&gt;...&lt;/hard-timeout&gt;
+        
+        &lt;/vtn-path-map&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="remove-path-map">remove-path-map
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the path map configuration in the global or VTN path map.
+                
+                           Values passed to `map-index' list will be copied to the RPC
+                           output, and `status' field in `vtn-path-map-result' describes
+                           the result of the operation.
+                
+                           `REMOVED' indicates that the path map associated with the map index
+                           has been successfully removed.
+                
+                           Null indicates that the path map is not associated with the map
+                           index in the specified path map.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by the name is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-path-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+                                   If this field is specified, path maps specified in the
+                                   RPC input will be removed from the VTN path map
+                                   configuration.
+                                   If this field is omitted, path maps specified in the
+                                   RPC input will be removed from the global path map
+                                   configuration.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: map-index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of path map indices to be removed from the path map
+                                   configuration specified by `tenant-name' field.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: int32
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-path-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="remove-path-map/output/remove-path-map-result">
+                list: remove-path-map-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of path map indices passed to the RPC input
+                                   and results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-map-result">vtn-path-map-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that specifies the flow match in the flow
+                               condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="set-path-map">set-path-map
+    </h3>
+        <ul>
+            <li>
+                Description: Create or modify the global or VTN path map.
+                
+                           This operation takes a list of `vtn-path-map-config', and
+                           put all configurations into the specified path map list.
+                           If the name of the VTN is specified, the given path maps are
+                           configured as the VTN path map. Otherwise they are configured as
+                           the global path map.
+                
+                           Path map indices specified in the RPC input will be copied to the
+                           RPC output, and `status' field in `vtn-path-map-result' describes
+                           the result of the operation.
+                
+                           `CREATED' indicates that the path map configuration specified by
+                           the index value has been newly created.
+                
+                           `CHANGED' indicates that the path map configuration specified by
+                           the index value has been successfully changed.
+                
+                           Null indicates that the path map configuration specified by the
+                           index value was not changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by the name is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-path-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+                                   If this field is specified, the specified path map will
+                                   affect flows only in the specified VTN.
+                                   If this field is omitted, the specified path map will
+                                   affect flows in all the VTNs.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-path-map/input/path-map-list">
+                list: path-map-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of `vtn-path-map-config' to be applied to the
+                                   path map configuration. Note that a duplicate match index
+                                   in this list will cause a `BADREQUEST' error.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-map-config">vtn-path-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: condition
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the flow condition that selects packets.
+                               This path map is invalidated if the flow condition specified
+                               by this field is not present.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vnode-name
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: policy
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The identifier of the path policy which determines the route
+                               of packets.
+                               This path map is invalidated if the path policy specified by
+                               this field is not present.
+                               Zero specifies the system default path policy which
+                               minimizes the number of hops in the packet route.
+                               If omitted, it will be treated as if zero is specified.
+            </li>
+            <li>
+                type: <a href="#set-path-map/input/path-map-list/policy">policy</a>
+            </li>
+            <li>
+                default: 0
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that determines the order of elements in a
+                               list.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: idle-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `idle-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: hard-timeout
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of seconds to be set to `hard-timeout' field
+                                 in flow entries. Zero means an infinite time.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-path-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="set-path-map/output/set-path-map-result">
+                list: set-path-map-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of path map indices passed to the RPC input
+                                   and results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-path-map-result">vtn-path-map-result</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: index
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The index value that specifies the flow match in the flow
+                               condition.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="clear-path-map">clear-path-map
+    </h3>
+        <ul>
+            <li>
+                Description: Remove all the path map configurations present in the global or
+                           VTN path map container.
+                
+                           `status' in RPC output descripts the result of the operation.
+                
+                           `REMOVED' indicates that at least one path map in the specified
+                           path map container has been removed.
+                
+                           Null indicates that no configuration is present in the specified
+                           path map.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by the name is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="clear-path-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+                                   If this field is specified, all path map configurations
+                                   present in the specified VTN will be removed.
+                                   If this field is omitted, all global path map
+                                   configurations will be removed.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="clear-path-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

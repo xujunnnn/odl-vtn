@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-static-topology</title>
+  </head>
+  <body>
+    <h1>vtn-static-topology</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>vtopo-static</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:topology:static</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-08-01</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the static network topology configuration
+                   used by the VTN Manager. User can configure inter-switch links
+                   statically by configuring config DS containers defined by this module.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        vtype:vtn-types 2015-02-09;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-static-topology"><strong>vtn-static-topology</strong></a>
+            </td>
+            <td>
+            The root container that keeps configuration for static network
+                       topology.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-static-topology</strong>
+    <ul>
+    <li>
+        <a href="#vtn-static-topology"><strong>vtn-static-topology</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#vtn-static-topology/static-switch-links"><strong>static-switch-links</strong>
+            </a>
+            <ul>
+            <li>
+                <a href="#vtn-static-topology/static-switch-links/static-switch-link"><strong>static-switch-link</strong> [source]
+                </a>
+                <ul>
+                <li>
+                    <i>source</i>(U)
+                </li>
+                <li>
+                    <i>destination</i>(U)
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#vtn-static-topology/static-edge-ports"><strong>static-edge-ports</strong>
+            </a>
+            <ul>
+            <li>
+                <a href="#vtn-static-topology/static-edge-ports/static-edge-port"><strong>static-edge-port</strong> [port]
+                </a>
+                <ul>
+                <li>
+                    port
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-static-topology">vtn-static-topology</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="vtn-static-topology">
+        vtn-static-topology
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-static-topology:vtn-static-topology</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-static-topology/static-switch-links">static-switch-links</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#vtn-static-topology/static-edge-ports">static-edge-ports</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;vtn-static-topology xmlns="urn:opendaylight:vtn:topology:static"&gt;<!-- Child nodes -->
+        <!-- static-switch-links -->
+            &lt!-- See <a href="#vtn-static-topology/static-switch-links">definition</a>
+             for child nodes.  --&gt
+            &lt;static-switch-links xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/static-switch-links&gt;
+        <!-- static-edge-ports -->
+            &lt!-- See <a href="#vtn-static-topology/static-edge-ports">definition</a>
+             for child nodes.  --&gt
+            &lt;static-edge-ports xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/static-edge-ports&gt;
+        
+        &lt;/vtn-static-topology&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-static-topology/static-switch-links">
+        vtn-static-topology/static-switch-links
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-static-topology:vtn-static-topology/static-switch-links</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-static-topology/static-switch-links/static-switch-link">static-switch-link</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;static-switch-links xmlns="urn:opendaylight:vtn:topology:static"&gt;<!-- Child nodes -->
+        <!-- static-switch-link -->
+            &lt!-- See <a href="#vtn-static-topology/static-switch-links/static-switch-link">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;static-switch-link xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/static-switch-link&gt;
+        
+        &lt;/static-switch-links&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-static-topology/static-switch-links/static-switch-link">
+        vtn-static-topology/static-switch-links/static-switch-link
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-static-topology:vtn-static-topology/static-switch-links/static-switch-link/{source}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>source</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    <li><strong>destination</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;static-switch-link xmlns="urn:opendaylight:vtn:topology:static"&gt;<!-- Child nodes -->
+        <!-- source -->
+            &lt;source xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/source&gt;
+        <!-- destination -->
+            &lt;destination xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/destination&gt;
+        
+        &lt;/static-switch-link&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-static-topology/static-edge-ports">
+        vtn-static-topology/static-edge-ports
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-static-topology:vtn-static-topology/static-edge-ports</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#vtn-static-topology/static-edge-ports/static-edge-port">static-edge-port</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;static-edge-ports xmlns="urn:opendaylight:vtn:topology:static"&gt;<!-- Child nodes -->
+        <!-- static-edge-port -->
+            &lt!-- See <a href="#vtn-static-topology/static-edge-ports/static-edge-port">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;static-edge-port xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/static-edge-port&gt;
+        
+        &lt;/static-edge-ports&gt;
+    </pre>
+    </h3>
+    <h3 id="vtn-static-topology/static-edge-ports/static-edge-port">
+        vtn-static-topology/static-edge-ports/static-edge-port
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-static-topology:vtn-static-topology/static-edge-ports/static-edge-port/{port}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>port</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>true</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;static-edge-port xmlns="urn:opendaylight:vtn:topology:static"&gt;<!-- Child nodes -->
+        <!-- port -->
+            &lt;port xmlns="urn:opendaylight:vtn:topology:static"&gt;...&lt;/port&gt;
+        
+        &lt;/static-edge-port&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    
+    
+    
+  </body>
+</html>

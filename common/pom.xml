@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+#
+# Copyright (c) 2013-2016 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+
+  <groupId>org.opendaylight.vtn</groupId>
+  <artifactId>common</artifactId>
+  <version>0.6.0-Carbon</version>
+  <packaging>pom</packaging>
+  <!-- <name> formatting is used by autorelease to parse and notify projects on
+       build failure. Please do not modify this unless you have a good reason. -->
+  <name>ODL :: vtn :: ${project.artifactId}</name>
+  <description>Common configuration required by POM files in VTN project.</description>
+
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>odlparent</artifactId>
+    <version>1.8.0-Carbon</version>
+    <relativePath/>
+  </parent>
+
+  <scm>
+    <connection>scm:git:https://git.opendaylight.org/gerrit/p/vtn.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/vtn.git</developerConnection>
+    <url>https://wiki.opendaylight.org/view/OpenDaylight_Virtual_Tenant_Network_%28VTN%29:Main</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <buildnumber.version>1.2</buildnumber.version>
+    <execplugin.version>1.2.1</execplugin.version>
+
+    <odl.odlparent.version>1.8.0-Carbon</odl.odlparent.version>
+
+    <!-- VTN Manager version -->
+    <vtn.manager.version>0.6.0-Carbon</vtn.manager.version>
+  </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>buildnumber-maven-plugin</artifactId>
+          <version>${buildnumber.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <finalName>${project.artifactId}-${build.suffix}</finalName>
+            <useStandardDocletOptions>true</useStandardDocletOptions>
+            <charset>${project.reporting.outputEncoding}</charset>
+            <encoding>${project.reporting.outputEncoding}</encoding>
+            <docencoding>${project.reporting.outputEncoding}</docencoding>
+            <breakiterator>true</breakiterator>
+            <version>true</version>
+            <author>true</author>
+            <keywords>true</keywords>
+            <additionalparam>${vtn.javadoc.args}</additionalparam>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>viewbuild</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <build.suffix>${project.version}</build.suffix>
+        <vtn.build.id />
+      </properties>
+    </profile>
+    <profile>
+      <id>jenkins</id>
+      <activation>
+        <property>
+          <name>BUILDSUFFIX</name>
+        </property>
+      </activation>
+      <properties>
+        <build.suffix>${BUILDSUFFIX}</build.suffix>
+        <vtn.build.id>${BUILDSUFFIX}</vtn.build.id>
+      </properties>
+    </profile>
+  </profiles>
+
+  <url>${odl.site.url}/${project.groupId}/${stream}/${project.artifactId}/</url>
+
+  <distributionManagement>
+    <site>
+      <id>opendaylight-site</id>
+      <url>${nexus.site.url}/${project.artifactId}/</url>
+    </site>
+  </distributionManagement>
+</project>

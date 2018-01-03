@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-mac-map</title>
+  </head>
+  <body>
+    <h1>vtn-mac-map</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>macmap</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:mapping:mac</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-09-07</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the data models for MAC mapping, which
+                   associates a host with a vBridge in VTN.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        yang:ietf-yang-types 2013-07-15;
+            vtype:vtn-types 2015-02-09;
+            mactable:vtn-mac-table 2015-09-07;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-map-info"><strong>vtn-mac-map-info</strong></a>
+            </td>
+            <td>
+            Describes information about MAC mapping, which maps hosts
+                       specified by MAC address and VLAN ID to a vBridge.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-map-status"><strong>vtn-mac-map-status</strong></a>
+            </td>
+            <td>
+            Describes runtime status information about MAC mapping.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-map-config"><strong>vtn-mac-map-config</strong></a>
+            </td>
+            <td>
+            Describes configuration for a MAC mapping.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-mappable"><strong>vtn-mac-mappable</strong></a>
+            </td>
+            <td>
+            Describes the data model which can contain MAC mapping
+                       configuration.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-mac-map"><strong>set-mac-map</strong></a>
+            </td>
+            <td>
+            Configure MAC mapping in the specified vBridge.
+            
+                       This operation changes the MAC addresses to be mapped and not to
+                       be mapped at the same time.
+            
+                       Upon successful completion, the result of this operation will
+                       be set to the `status' field in the RPC output.
+            
+                       `CREATED' indicates that new MAC mapping configuration has been
+                       created in the specified vBridge.
+            
+                       `CHANGED' indicates that existing MAC mapping configuration has
+                       been changed.
+            
+                       `REMOVED' indicates that MAC mapping configuration has been removed
+                       from the specified vBridge.
+            
+                       Null indicates that MAC mapping configuration in the specified
+                       vBridge was not changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `CONFLICT' is set if this operation tries to map a host already
+                       mapped by another MAC mapping.
+            
+                       `CONFLICT' is set if this operation tries to add a MAC address
+                       into `allowed-hosts' in the MAC mapping configuration, and that
+                       MAC address is already configured in `allowed-hosts'.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#set-mac-map-acl"><strong>set-mac-map-acl</strong></a>
+            </td>
+            <td>
+            Configure MAC mapping in the specified vBridge.
+            
+                       This operation changes the specified access control list of the
+                       MAC mapping.
+            
+                       Upon successful completion, the result of this operation will
+                       be set to the `status' field in the RPC output.
+            
+                       `CREATED' indicates that new MAC mapping configuration has been
+                       created in the specified vBridge.
+            
+                       `CHANGED' indicates that existing MAC mapping configuration has
+                       been changed.
+            
+                       `REMOVED' indicates that MAC mapping configuration has been removed
+                       from the specified vBridge.
+            
+                       Null indicates that MAC mapping configuration in the specified
+                       vBridge was not changed.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `CONFLICT' is set if this operation tries to map a host already
+                       mapped by another MAC mapping.
+            
+                       `CONFLICT' is set if this operation tries to add a MAC address
+                       into `allowed-hosts' in the MAC mapping configuration, and that
+                       MAC address is already configured in `allowed-hosts'.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#get-mac-mapped-host"><strong>get-mac-mapped-host</strong></a>
+            </td>
+            <td>
+            Get a list of hosts where mapping is actually active based on MAC
+                       mapping configured in the specified vBridge.
+            
+                       Upon successful completion, a list of host information is will be
+                       set to the RPC output.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                       present.
+            
+                       `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                       `bridge-name' is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-mac-map-info">vtn-mac-map-info</h3>
+        <ul>
+            <li>
+                Description: Describes information about MAC mapping, which maps hosts
+                           specified by MAC address and VLAN ID to a vBridge.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-config">
+                container: mac-map-config
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains configuration for MAC mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-map-config">vtn-mac-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-config/allowed-hosts">
+                container: allowed-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts to be mapped by MAC mapping.
+                               If a host in this container does not specify a MAC address,
+                               all the hosts detected over the specified VLAN will be mapped.
+                               For example, if "@10" is configured in this container,
+                               all hosts detected on VLAN 10 will be mapped.
+                
+                               Note that zero, broadcast address, and multicast address
+                               cannot be specified as MAC address. In addition, multiple host
+                               information with the same MAC address cannot be configured in
+                               this set.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vlan-host-desc-set
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-config/allowed-hosts/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-config/denied-hosts">
+                container: denied-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts not to be mapped by MAC mapping.
+                               This container is used to exclude specific hosts from mapping
+                               when host information in `allowed-hosts' does not specify any
+                               MAC address. Unlike `allowed-hosts', every hosts in this
+                               container must specify a MAC address.
+                
+                               The hosts in this container is evaluated before
+                               `allowed-hosts'. If the same host information is specified in
+                               both `allowed-hosts' and this container, that host will not be
+                               mapped by this MAC mapping.
+                
+                               Note that zero, broadcast address, and multicast address
+                               cannot be specified as MAC address.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vlan-host-desc-set
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-config/denied-hosts/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-status">
+                container: mac-map-status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains runtime status information about
+                               MAC mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-map-status">vtn-mac-map-status</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-info/mac-map-status/mapped-host">
+                list: mapped-host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of MAC addresses actually mapped to the vBridge.
+            </li>
+            <li>
+                key definition: mac-address
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-vlan-id-field
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address actually mapped to the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: An identifier for a physical switch port where the
+                                   MAC address is detected.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-mac-map-status">vtn-mac-map-status</h3>
+        <ul>
+            <li>
+                Description: Describes runtime status information about MAC mapping.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-status/mapped-host">
+                list: mapped-host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of MAC addresses actually mapped to the vBridge.
+            </li>
+            <li>
+                key definition: mac-address
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-vlan-id-field
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address actually mapped to the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: An identifier for a physical switch port where the
+                                   MAC address is detected.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-mac-map-config">vtn-mac-map-config</h3>
+        <ul>
+            <li>
+                Description: Describes configuration for a MAC mapping.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-config/allowed-hosts">
+                container: allowed-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts to be mapped by MAC mapping.
+                               If a host in this container does not specify a MAC address,
+                               all the hosts detected over the specified VLAN will be mapped.
+                               For example, if "@10" is configured in this container,
+                               all hosts detected on VLAN 10 will be mapped.
+                
+                               Note that zero, broadcast address, and multicast address
+                               cannot be specified as MAC address. In addition, multiple host
+                               information with the same MAC address cannot be configured in
+                               this set.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vlan-host-desc-set
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-config/allowed-hosts/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-config/denied-hosts">
+                container: denied-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts not to be mapped by MAC mapping.
+                               This container is used to exclude specific hosts from mapping
+                               when host information in `allowed-hosts' does not specify any
+                               MAC address. Unlike `allowed-hosts', every hosts in this
+                               container must specify a MAC address.
+                
+                               The hosts in this container is evaluated before
+                               `allowed-hosts'. If the same host information is specified in
+                               both `allowed-hosts' and this container, that host will not be
+                               mapped by this MAC mapping.
+                
+                               Note that zero, broadcast address, and multicast address
+                               cannot be specified as MAC address.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vlan-host-desc-set
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-map-config/denied-hosts/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-mac-mappable">vtn-mac-mappable</h3>
+        <ul>
+            <li>
+                Description: Describes the data model which can contain MAC mapping
+                           configuration.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map">
+                container: mac-map
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes information about MAC mapping, which maps hosts
+                               specified by MAC address and VLAN ID to a vBridge.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-map-info">vtn-mac-map-info</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-config">
+                container: mac-map-config
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains configuration for MAC mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-map-config">vtn-mac-map-config</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-config/allowed-hosts">
+                container: allowed-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts to be mapped by MAC mapping.
+                               If a host in this container does not specify a MAC address,
+                               all the hosts detected over the specified VLAN will be mapped.
+                               For example, if "@10" is configured in this container,
+                               all hosts detected on VLAN 10 will be mapped.
+                
+                               Note that zero, broadcast address, and multicast address
+                               cannot be specified as MAC address. In addition, multiple host
+                               information with the same MAC address cannot be configured in
+                               this set.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vlan-host-desc-set
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-config/allowed-hosts/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-config/denied-hosts">
+                container: denied-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts not to be mapped by MAC mapping.
+                               This container is used to exclude specific hosts from mapping
+                               when host information in `allowed-hosts' does not specify any
+                               MAC address. Unlike `allowed-hosts', every hosts in this
+                               container must specify a MAC address.
+                
+                               The hosts in this container is evaluated before
+                               `allowed-hosts'. If the same host information is specified in
+                               both `allowed-hosts' and this container, that host will not be
+                               mapped by this MAC mapping.
+                
+                               Note that zero, broadcast address, and multicast address
+                               cannot be specified as MAC address.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vlan-host-desc-set
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-config/denied-hosts/vlan-host-desc-list">
+                list: vlan-host-desc-list
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes a list of unique `vlan-host-desc' values.
+            </li>
+            <li>
+                key definition: host
+            </li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A pair of MAC address and VLAN ID.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-status">
+                container: mac-map-status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The container which contains runtime status information about
+                               MAC mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-map-status">vtn-mac-map-status</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-mappable/mac-map/mac-map-status/mapped-host">
+                list: mapped-host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of MAC addresses actually mapped to the vBridge.
+            </li>
+            <li>
+                key definition: mac-address
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-vlan-id-field
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address actually mapped to the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: An identifier for a physical switch port where the
+                                   MAC address is detected.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-connector-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Specifies the VLAN ID.
+                               Zero implies untagged Ethernet frame.
+                               If omitted, it will be treated as zero is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:l2:types)vlan-id
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="set-mac-map">set-mac-map
+    </h3>
+        <ul>
+            <li>
+                Description: Configure MAC mapping in the specified vBridge.
+                
+                           This operation changes the MAC addresses to be mapped and not to
+                           be mapped at the same time.
+                
+                           Upon successful completion, the result of this operation will
+                           be set to the `status' field in the RPC output.
+                
+                           `CREATED' indicates that new MAC mapping configuration has been
+                           created in the specified vBridge.
+                
+                           `CHANGED' indicates that existing MAC mapping configuration has
+                           been changed.
+                
+                           `REMOVED' indicates that MAC mapping configuration has been removed
+                           from the specified vBridge.
+                
+                           Null indicates that MAC mapping configuration in the specified
+                           vBridge was not changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `CONFLICT' is set if this operation tries to map a host already
+                           mapped by another MAC mapping.
+                
+                           `CONFLICT' is set if this operation tries to add a MAC address
+                           into `allowed-hosts' in the MAC mapping configuration, and that
+                           MAC address is already configured in `allowed-hosts'.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-mac-map/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: operation
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes how to update the specified MAC mapping.
+                
+                                   If `SET' is specified, the given MAC mapping configuration
+                                   will be applied as specified. In other words, existing
+                                   MAC mapping configuration will be removed, and then the
+                                   given MAC mapping will be created. Note that MAC mapping
+                                   will be removed if both `allowed-hosts' and `denied-hosts'
+                                   fields in the RPC input are empty.
+                
+                                   If `ADD' is specified, the given MAC mapping configuration
+                                   will be merged with existing configuration. Hosts configured
+                                   in `allowed-hosts' and `denied-hosts' fields in the RPC
+                                   input will be added to `allowed-hosts' and `denied-hosts'
+                                   container in the MAC mapping configuration respectively.
+                
+                                   If `REMOVE' is specified, the given MAC mapping
+                                   configuration will be removed from existing configuration.
+                                   Hosts configured in `allowed-hosts' and `denied-hosts'
+                                   fields in the RPC input will be removed from `allowed-hosts'
+                                   and `denied-hosts' container in the MAC mapping
+                                   configuration respectively.
+                                   Note that MAC mapping will be removed if both
+                                   `allowed-hosts' and `denied-hosts' container in the MAC
+                                   mapping configuration become empty.
+                
+                                   Null will be treated as if `ADD' is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-operation-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: allowed-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts to be added to or removed from
+                                  `allowed-hosts' container in the MAC mapping configuration.
+                                   Duplicate hosts will be eliminated automatically.
+                                   Note that multiple host information with the same MAC
+                                   address cannot be specified in this list.
+            </li>
+            <li>
+                type: vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: denied-hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of hosts to be added to or removed from `denied-hosts'
+                                   container in the MAC mapping configuration.
+                                   Duplicate hosts will be eliminated automatically.
+            </li>
+            <li>
+                type: vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-mac-map/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="set-mac-map-acl">set-mac-map-acl
+    </h3>
+        <ul>
+            <li>
+                Description: Configure MAC mapping in the specified vBridge.
+                
+                           This operation changes the specified access control list of the
+                           MAC mapping.
+                
+                           Upon successful completion, the result of this operation will
+                           be set to the `status' field in the RPC output.
+                
+                           `CREATED' indicates that new MAC mapping configuration has been
+                           created in the specified vBridge.
+                
+                           `CHANGED' indicates that existing MAC mapping configuration has
+                           been changed.
+                
+                           `REMOVED' indicates that MAC mapping configuration has been removed
+                           from the specified vBridge.
+                
+                           Null indicates that MAC mapping configuration in the specified
+                           vBridge was not changed.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `CONFLICT' is set if this operation tries to map a host already
+                           mapped by another MAC mapping.
+                
+                           `CONFLICT' is set if this operation tries to add a MAC address
+                           into `allowed-hosts' in the MAC mapping configuration, and that
+                           MAC address is already configured in `allowed-hosts'.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="set-mac-map-acl/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: acl-type
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The type of the target access control list.
+                                   `ALLOW' indicates that the `allowed-hosts' container in the
+                                   MAC mapping configuration should be modified.
+                                   `DENY' indicates that the `denied-hosts' container in the
+                                   MAC mapping configuration should be modified.
+                
+                                   Null is treated as if `ALLOW' is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-acl-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: operation
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes how to update the specified access control list
+                                   in the MAC mapping configuration.
+                
+                                   If `SET' is specified, the given list of host information
+                                   will be applied to the specified access control list as
+                                   specified. In other words, the specified access control
+                                   list is cleared, and then the given host information will
+                                   be added to the specified access control list.
+                                   Note that MAC mapping will be removed if both
+                                   `allowed-hosts' and `denied-hosts' container in the MAC
+                                   mapping configuration become empty.
+                
+                                   If `ADD' is specified, the given list of host information
+                                   will be added to the specified access control list in the
+                                   MAC mapping configuration.
+                
+                                   If `REMOVE' is specified, the host information configured
+                                   in the RPC input will be removed from the specified access
+                                   conrol list in the MAC mapping configuration.
+                                   Note that MAC mapping will be removed if both
+                                   `allowed-hosts' and `denied-hosts' container in the MAC
+                                   mapping configuration become empty.
+                
+                                   Null will be treated as if `ADD' is specified.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-operation-type
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: hosts
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of host information to be added to or removed from
+                                   the access control list in the MAC mapping configuration.
+                                   Duplicate hosts will be eliminated automatically.
+            </li>
+            <li>
+                type: vlan-host-desc
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="set-mac-map-acl/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    <h3 id="get-mac-mapped-host">get-mac-mapped-host
+    </h3>
+        <ul>
+            <li>
+                Description: Get a list of hosts where mapping is actually active based on MAC
+                           mapping configured in the specified vBridge.
+                
+                           Upon successful completion, a list of host information is will be
+                           set to the RPC output.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN specified by `tenant-name' is not
+                           present.
+                
+                           `NOTFOUND' is set if the vBridge specified by `tenant-name' and
+                           `bridge-name' is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="get-mac-mapped-host/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: mac-addresses
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of MAC addresses to be searched.
+                                   If this field is omitted or an empty list is specified,
+                                   all the host information mapped to the specified vBridge by
+                                   the MAC mapping will be set to the RPC output.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="get-mac-mapped-host/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: configured
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: True is set only if the MAC mapping is configured in the
+                                   vBridge specified by the RPC input.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="get-mac-mapped-host/output/mac-mapped-host">
+                list: mac-mapped-host
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of host information mapped to the specified vBridge
+                                   by MAC mapping.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:vbridge:mac)vtn-mac-entry
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A string representation of a learned MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A VLAN ID detected inside Ethernet frame where the MAC address
+                               was detected. Zero implies that VLAN tag was not detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: ip-addresses
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of IP addresses detected inside Ethernet frame where the
+                               MAC address was detected.
+            </li>
+            <li>
+                type: ip-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+#
+# Copyright (c) 2014-2016 NEC Corporation
+# All rights reserved.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License v1.0 which accompanies this
+# distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+#
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>karaf-parent</artifactId>
+    <version>1.8.0-Carbon</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.opendaylight.vtn</groupId>
+  <artifactId>distribution.vtn-manager.karaf</artifactId>
+  <version>0.6.0-Carbon</version>
+  <packaging>pom</packaging>
+  <!-- <name> formatting is used by autorelease to parse and notify projects on
+       build failure. Please do not modify this unless you have a good reason. -->
+  <name>ODL :: vtn :: ${project.artifactId}</name>
+  <description>Karaf distribution for running VTN Manager.</description>
+
+  <scm>
+    <connection>scm:git:https://git.opendaylight.org/gerrit/p/vtn.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/vtn.git</developerConnection>
+    <url>https://wiki.opendaylight.org/view/OpenDaylight_Virtual_Tenant_Network_%28VTN%29:Main</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <!-- scope is compile so all features (there is only one) are installed
+           into startup.properties and the feature repo itself is not installed -->
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>framework</artifactId>
+      <type>kar</type>
+    </dependency>
+
+    <!-- VTN Manager feature -->
+    <dependency>
+      <groupId>org.opendaylight.vtn</groupId>
+      <artifactId>features-vtn-manager</artifactId>
+      <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.karaf.tooling</groupId>
+        <artifactId>karaf-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <!-- no startupFeatures -->
+          <bootFeatures>
+            <feature>standard</feature>
+            <feature>odl-vtn-manager-rest</feature>
+            <feature>odl-vtn-manager-neutron</feature>
+          </bootFeatures>
+          <!-- no installedFeatures -->
+        </configuration>
+      </plugin>
+
+      <!-- Ignore maven-site-plugin goals -->
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <url>${odl.site.url}/${project.groupId}/${stream}/${project.artifactId}/</url>
+  <distributionManagement>
+    <site>
+      <id>opendaylight-site</id>
+      <url>${nexus.site.url}/${project.artifactId}/</url>
+    </site>
+  </distributionManagement>
+</project>

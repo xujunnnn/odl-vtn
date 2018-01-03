@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vtn-mac-table</title>
+  </head>
+  <body>
+    <h1>vtn-mac-table</h1>
+    
+    <h2>Base Information</h2>
+    <table>
+        <tr>
+            <td><strong>prefix</strong></td>
+            <td>mactable</td>
+        </tr>
+        <tr>
+            <td><strong>namespace</strong></td>
+            <td>urn:opendaylight:vtn:vbridge:mac</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>2015-09-07</td>
+        </tr>
+        <tr>
+            <td><strong>description</strong></td>
+            <td>The module that describes the data models for MAC address table,
+                   which keeps MAC addresses learned inside vBridge.</td>
+        </tr>
+        <tr>
+            <td><strong>yang-version</strong></td>
+            <td>1</td>
+        </tr>
+        <tr>
+    <td><strong>imports</strong></td><td>        yang:ietf-yang-types 2013-07-15;
+            inet:ietf-inet-types 2013-07-15;
+            vtype:vtn-types 2015-02-09;
+            inv:opendaylight-inventory 2013-08-19;
+    </td>    </tr>
+    </table>
+    
+    <h3>Groupings Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-table-list"><strong>vtn-mac-table-list</strong></a>
+            </td>
+            <td>
+            A list of MAC address tables.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-entry"><strong>vtn-mac-entry</strong></a>
+            </td>
+            <td>
+            Describes information about a MAC address learned inside vBridge.
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <a href="#vtn-mac-table-entry"><strong>vtn-mac-table-entry</strong></a>
+            </td>
+            <td>
+            Describes a set of MAC address entry in a MAC address table.
+            </td>
+        </tr>
+    </table>
+    <h3>Child Nodes Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#mac-tables"><strong>mac-tables</strong></a>
+            </td>
+            <td>
+            The root container of all the MAC address tables for vBridges.
+                       Do not edit this container directly.
+            </td>
+        </tr>
+    </table>
+    <h3>RPCs Summary</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+            <a href="#remove-mac-entry"><strong>remove-mac-entry</strong></a>
+            </td>
+            <td>
+            Remove the specified MAC address information from the MAC address
+                       table in the specified vBridge.
+            
+                       MAC addresses passed to `mac-addresses' list will be copied to the
+                       RPC output, and `status' field in the RPC output descripes the
+                       result of the operation.
+            
+                       `REMOVED' indicates that the MAC address specified by `mac-address'
+                       field in the RPC output has been successfully removed.
+            
+                       Null indicates that the MAC address specified by `mac-address'
+                       field in the RPC output is not learned by the vBridge specified by
+                       the RPC input.
+            
+                       If no MAC address is specified by the RPC input, all the MAC
+                       addresses in the MAC address table will be removed. In this case
+                       all the removed MAC addresses will be copied to the RPC output.
+                       `remove-mac-entry-result' will be null if no MAC address is
+                       specified by the RPC input and the specified MAC address table is
+                       empty.
+            
+                       On failure, one of vtn-error-tag value which indicates the cause
+                       of error is set into application tag in RPC error.
+            
+                       `BADREQUEST' is set if the RPC input contains invalid data.
+            
+                       `NOTFOUND' is set if the VTN or the vBridge specified by the RPC
+                       input is not present.
+            
+                       `INTERNALERROR' is set if the operation failed due to internal
+                       error.
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+    <h2>Groupings</h2>
+    <ul>
+    <li>
+        <h3 id="vtn-mac-table-list">vtn-mac-table-list</h3>
+        <ul>
+            <li>
+                Description: A list of MAC address tables.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-mac-table-list/mac-address-table">
+                list: mac-address-table
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address table keeps MAC address information learned by
+                               a vBridge.
+            </li>
+            <li>
+                key definition: name
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-table-entry">vtn-mac-table-entry</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge associated with this MAC address
+                                   table.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="vtn-mac-table-list/mac-address-table/mac-table-entry">
+                list: mac-table-entry
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address information learned by a vBridge.
+            </li>
+            <li>
+                key definition: mac-address
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-entry">vtn-mac-entry</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: used
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: True is set if this entry is used by the VTN Manager
+                                   This field is only for internal use.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ip-probe-count
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of IP address probe request.
+                                   This field is only for internal use.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: entry-data
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: An opaque data associated with this entry.
+                                   This field is only for internal use.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A string representation of a learned MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A VLAN ID detected inside Ethernet frame where the MAC address
+                               was detected. Zero implies that VLAN tag was not detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: ip-addresses
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of IP addresses detected inside Ethernet frame where the
+                               MAC address was detected.
+            </li>
+            <li>
+                type: ip-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-mac-entry">vtn-mac-entry</h3>
+        <ul>
+            <li>
+                Description: Describes information about a MAC address learned inside vBridge.
+            </li>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A string representation of a learned MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A VLAN ID detected inside Ethernet frame where the MAC address
+                               was detected. Zero implies that VLAN tag was not detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: ip-addresses
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of IP addresses detected inside Ethernet frame where the
+                               MAC address was detected.
+            </li>
+            <li>
+                type: ip-address
+            </li>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    <li>
+        <h3 id="vtn-mac-table-entry">vtn-mac-table-entry</h3>
+        <ul>
+            <li>
+                Description: Describes a set of MAC address entry in a MAC address table.
+            </li>
+            <ul>
+            <strong>
+            <li id="vtn-mac-table-entry/mac-table-entry">
+                list: mac-table-entry
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: MAC address information learned by a vBridge.
+            </li>
+            <li>
+                key definition: mac-address
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: <a href="#vtn-mac-entry">vtn-mac-entry</a>
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A string representation of a learned MAC address.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: vlan-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A VLAN ID detected inside Ethernet frame where the MAC address
+                               was detected. Zero implies that VLAN tag was not detected.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)uint16
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: ip-addresses
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A set of IP addresses detected inside Ethernet frame where the
+                               MAC address was detected.
+            </li>
+            <li>
+                type: ip-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: node
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a physical switch.
+            </li>
+            <li>
+                type: (urn:opendaylight:inventory)node-id
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-id
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Identifier for a switch port in the physical switch.
+                               To specify the OpenFlow switch port, a string representation
+                               of the port number for a physical port needs to be specified.
+                
+                               If this field is omitted, it is necessary to specify the
+                               `port-name' field.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: port-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the switch port.
+                
+                               Note that an empty string cannot be specified as the port name.
+                               If this attribute is omitted, it is necessary to specify the
+                               `port-id' field.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: used
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: True is set if this entry is used by the VTN Manager
+                                   This field is only for internal use.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)boolean
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: ip-probe-count
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The number of IP address probe request.
+                                   This field is only for internal use.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)int32
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: entry-data
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: An opaque data associated with this entry.
+                                   This field is only for internal use.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Datastore Structure</h2>
+    <strong>vtn-mac-table</strong>
+    <ul>
+    <li>
+        <a href="#mac-tables"><strong>mac-tables</strong>
+        </a>
+        <ul>
+        <li>
+            <a href="#mac-tables/tenant-mac-table"><strong>tenant-mac-table</strong> [name]
+            </a>
+            <ul>
+            <li>
+                name
+            </li>
+            <li>
+                <a href="#mac-tables/tenant-mac-table/mac-address-table"><strong><i>mac-address-table</i></strong> [name]
+                (U)
+                </a>
+                <ul>
+                <li>
+                    <i>name</i>(U)
+                </li>
+                <li>
+                    <a href="#mac-tables/tenant-mac-table/mac-address-table/mac-table-entry"><strong><i>mac-table-entry</i></strong> [mac-address]
+                    (U)
+                    </a>
+                    <ul>
+                    <li>
+                        <i>used</i>(U)
+                    </li>
+                    <li>
+                        <i>ip-probe-count</i>(U)
+                    </li>
+                    <li>
+                        <i>entry-data</i>(U)
+                    </li>
+                    <li>
+                        <i>mac-address</i>(U)
+                    </li>
+                    <li>
+                        <i>vlan-id</i>(U)
+                    </li>
+                    <li>
+                        <i>ip-addresses</i>(U)
+                    </li>
+                    <li>
+                        <i>node</i>(U)
+                    </li>
+                    <li>
+                        <i>port-id</i>(U)
+                    </li>
+                    <li>
+                        <i>port-name</i>(U)
+                    </li>
+                    </ul>
+                </li>
+                </ul>
+            </li>
+            </ul>
+        </li>
+        </ul>
+    </li>
+    </ul>
+    
+    <h2>Child nodes</h2>
+    
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#mac-tables">mac-tables</a>
+    </strong> (container)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3 id="mac-tables">
+        mac-tables
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mac-table:mac-tables</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong><a href="#mac-tables/tenant-mac-table">tenant-mac-table</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;mac-tables xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;<!-- Child nodes -->
+        <!-- tenant-mac-table -->
+            &lt!-- See <a href="#mac-tables/tenant-mac-table">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;tenant-mac-table xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/tenant-mac-table&gt;
+        
+        &lt;/mac-tables&gt;
+    </pre>
+    </h3>
+    <h3 id="mac-tables/tenant-mac-table">
+        mac-tables/tenant-mac-table
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mac-table:mac-tables/tenant-mac-table/{name}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#mac-tables/tenant-mac-table/mac-address-table">mac-address-table</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;tenant-mac-table xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;<!-- Child nodes -->
+        <!-- name -->
+            &lt;name xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/name&gt;
+        <!-- mac-address-table -->
+            &lt!-- See <a href="#mac-tables/tenant-mac-table/mac-address-table">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;mac-address-table xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/mac-address-table&gt;
+        
+        &lt;/tenant-mac-table&gt;
+    </pre>
+    </h3>
+    <h3 id="mac-tables/tenant-mac-table/mac-address-table">
+        mac-tables/tenant-mac-table/mac-address-table
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mac-table:mac-tables/tenant-mac-table/{name}/mac-address-table/{name}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong><a href="#mac-tables/tenant-mac-table/mac-address-table/mac-table-entry">mac-table-entry</a>
+    </strong> (list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;mac-address-table xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;<!-- Child nodes -->
+        <!-- name -->
+            &lt;name xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/name&gt;
+        <!-- mac-table-entry -->
+            &lt!-- See <a href="#mac-tables/tenant-mac-table/mac-address-table/mac-table-entry">definition</a>
+             for child nodes.  --&gt
+            &lt!-- This node could appear multiple times --&gt
+            &lt;mac-table-entry xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/mac-table-entry&gt;
+        
+        &lt;/mac-address-table&gt;
+    </pre>
+    </h3>
+    <h3 id="mac-tables/tenant-mac-table/mac-address-table/mac-table-entry">
+        mac-tables/tenant-mac-table/mac-address-table/mac-table-entry
+    </h3>
+    <dl>
+      <dt>XML Path</dt>
+      <dd></dd>
+      <dt>Restconf path</dt>
+      <dd><code>vtn-mac-table:mac-tables/tenant-mac-table/{name}/mac-address-table/{name}/mac-table-entry/{mac-address}</code></dd>
+    </dl>
+    <h3>Direct children</h3>
+    <ul>
+    <li><strong>used</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>ip-probe-count</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>entry-data</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>mac-address</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>vlan-id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>node</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-id</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>port-name</strong> (leaf)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+        <li>mandatory: <strong>false</strong></li>
+    </ul>
+    </li>
+    <li><strong>ip-addresses</strong> (leaf-list)
+    <ul>
+        <li>configuration data: <strong>false</strong></li>
+    </ul>
+    </li>
+    </ul>
+    
+    <h3>XML example</h3>
+    <pre>
+        &lt;mac-table-entry xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;<!-- Child nodes -->
+        <!-- used -->
+            &lt;used xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/used&gt;
+        <!-- ip-probe-count -->
+            &lt;ip-probe-count xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/ip-probe-count&gt;
+        <!-- entry-data -->
+            &lt;entry-data xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/entry-data&gt;
+        <!-- mac-address -->
+            &lt;mac-address xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/mac-address&gt;
+        <!-- vlan-id -->
+            &lt;vlan-id xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/vlan-id&gt;
+        <!-- ip-addresses -->
+            &lt!-- This node could appear multiple times --&gt
+            &lt;ip-addresses xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/ip-addresses&gt;
+        <!-- node -->
+            &lt;node xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/node&gt;
+        <!-- port-id -->
+            &lt;port-id xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/port-id&gt;
+        <!-- port-name -->
+            &lt;port-name xmlns="urn:opendaylight:vtn:vbridge:mac"&gt;...&lt;/port-name&gt;
+        
+        &lt;/mac-table-entry&gt;
+    </pre>
+    </h3>
+    
+    
+    
+    <h2>RPC Definitions</h2>
+    <h3 id="remove-mac-entry">remove-mac-entry
+    </h3>
+        <ul>
+            <li>
+                Description: Remove the specified MAC address information from the MAC address
+                           table in the specified vBridge.
+                
+                           MAC addresses passed to `mac-addresses' list will be copied to the
+                           RPC output, and `status' field in the RPC output descripes the
+                           result of the operation.
+                
+                           `REMOVED' indicates that the MAC address specified by `mac-address'
+                           field in the RPC output has been successfully removed.
+                
+                           Null indicates that the MAC address specified by `mac-address'
+                           field in the RPC output is not learned by the vBridge specified by
+                           the RPC input.
+                
+                           If no MAC address is specified by the RPC input, all the MAC
+                           addresses in the MAC address table will be removed. In this case
+                           all the removed MAC addresses will be copied to the RPC output.
+                           `remove-mac-entry-result' will be null if no MAC address is
+                           specified by the RPC input and the specified MAC address table is
+                           empty.
+                
+                           On failure, one of vtn-error-tag value which indicates the cause
+                           of error is set into application tag in RPC error.
+                
+                           `BADREQUEST' is set if the RPC input contains invalid data.
+                
+                           `NOTFOUND' is set if the VTN or the vBridge specified by the RPC
+                           input is not present.
+                
+                           `INTERNALERROR' is set if the operation failed due to internal
+                           error.
+            </li>
+            <ul>
+            <strong>
+            <li id="remove-mac-entry/input">
+                container: input
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vbridge-path-fields
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: tenant-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the VTN.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: bridge-name
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: The name of the vBridge.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:1)string
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf-list: mac-addresses
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: A list of MAC addresses to be removed from the MAC address
+                                   table in the specified vBridge. If this field is omitted or
+                                   an empty list is specified, all the learned MAC addresses
+                                   by the specified vBridge will be removed.
+                                   Duplicates in this list will be eliminated automatically.
+            </li>
+            <li>
+                type: mac-address
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            <ul>
+            <strong>
+            <li id="remove-mac-entry/output">
+                container: output
+            </li>
+            </strong>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong>
+            <li id="remove-mac-entry/output/remove-mac-entry-result">
+                list: remove-mac-entry-result
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes pairs of MAC addresses and operation results.
+            </li>
+            </ul>
+            <ul>
+            <strong><li>
+                uses: (urn:opendaylight:vtn:types)vtn-rpc-result
+            </li>
+            </strong>
+            <ul>
+            <li>refines:
+                <ul>
+                </ul>
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+            <ul>
+            <strong><li>
+                leaf: mac-address
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: One of the MAC address specified by the RPC input.
+            </li>
+            <li>
+                type: (urn:ietf:params:xml:ns:yang:ietf-yang-types)mac-address
+            </li>
+            </ul>
+            </ul>
+            <ul>
+            <strong><li>
+                leaf: status
+            </li>
+            </strong>
+            <ul>
+            <li>
+                description: Describes the status of the RPC result.
+            </li>
+            <li>
+                type: (urn:opendaylight:vtn:types)vtn-update-type
+            </li>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+            </ul>
+        </ul>
+    </ul>
+    
+    
+    
+  </body>
+</html>
